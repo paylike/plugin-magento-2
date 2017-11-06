@@ -11,7 +11,11 @@ use Magento\Payment\Model\Method\Logger;
 
 class CheckoutAllSubmitAfterObserver implements ObserverInterface
 {
+    /**
+     * @var Logger
+     */
     private $logger;
+    
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -36,10 +40,10 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
     protected $transactionFactory;
 
     /**
+     * @param Logger $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      */
     public function __construct(

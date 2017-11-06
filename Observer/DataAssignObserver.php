@@ -32,6 +32,6 @@ class DataAssignObserver extends AbstractDataAssignObserver
                     $additionalData[SELF::TRANSACTION_RESULT]
                 );
             }
-    
+       
     }
 }
