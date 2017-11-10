@@ -14,7 +14,7 @@ use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
  */
 final class ConfigProvider implements ConfigProviderInterface {
 	const CODE = 'paylikepaymentmethod';
-	const MAGENTO_PAYLIKE_VERSION = '1.0.1';
+	const MAGENTO_PAYLIKE_VERSION = '1.0.0';
 	protected $scopeConfig;
 	protected $_cart;
 	protected $_assetRepo;
@@ -114,7 +114,7 @@ final class ConfigProvider implements ConfigProviderInterface {
 	 */
 
 	public function getPopupTitle() {
-		$title = $this->scopeConfig->getValue( 'payment/paylikepaymentmethod/title', \Magento\Store\Model\ScopeInterface::SCOPE_STORE );
+		$title = $this->scopeConfig->getValue( 'payment/paylikepaymentmethod/popup_title', \Magento\Store\Model\ScopeInterface::SCOPE_STORE );
 		if ( ! $title ) {
 
 			$title =$this->_storeManager->getStore()->getName();

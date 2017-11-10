@@ -208,7 +208,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 					'code'     => 'CLP',
 					'currency' => 'Chilean peso',
 					'numeric'  => '152',
-					'exponent' => 2,
+					'exponent' => 0,
 				),
 			'CNY' =>
 				array(
@@ -979,7 +979,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 					'code'     => 'UGX',
 					'currency' => 'Ugandan shilling',
 					'numeric'  => '800',
-					'exponent' => 2,
+					'exponent' => 0,
 				),
 			'USD' =>
 				array(

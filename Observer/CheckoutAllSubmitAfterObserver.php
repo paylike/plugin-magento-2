@@ -68,6 +68,14 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
         $order = $observer->getEvent()->getOrder();
+        $payment = $order->getPayment();
+        $method = $payment->getMethodInstance();
+        $methodTitle = $method->getTitle();
+
+        if ($methodTitle != "Paylike"){
+            return $this;
+        }
+
         $capturemode =  $this->scopeConfig->getValue('payment/paylikepaymentmethod/capture_mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
         if($capturemode == "instant"){
