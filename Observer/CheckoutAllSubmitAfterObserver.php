@@ -70,9 +70,9 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
         $order = $observer->getEvent()->getOrder();
         $payment = $order->getPayment();
         $method = $payment->getMethodInstance();
-        $methodTitle = $method->getTitle();
+        $methodName = $payment->getMethod();
 
-        if ($methodTitle != "Paylike"){
+        if ($methodName != "paylikepaymentmethod"){
             return $this;
         }
 
