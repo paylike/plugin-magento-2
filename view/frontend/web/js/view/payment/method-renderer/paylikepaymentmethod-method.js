@@ -51,7 +51,10 @@ define(
                 var paylike = Paylike(window.checkoutConfig.publicapikey);
                 var paylikeConfig = window.checkoutConfig.config;
                 var multiplier = window.checkoutConfig.multiplier;
-                paylikeConfig.amount = Math.ceil(quote.totals()['grand_total'] * multiplier);
+                var grandTotal = quote.totals()['grand_total'];
+                var taxAmount = quote.totals()['tax_amount'];
+                var totalAmount = grandTotal + taxAmount;
+                paylikeConfig.amount = Math.ceil(totalAmount * multiplier);
                 window.paylikeminoramount = paylikeConfig.amount;
                 if (quote.guestEmail) {
                     paylikeConfig.custom.customer.name = quote.billingAddress()['firstname'] + " " + quote.billingAddress()['lastname'];
