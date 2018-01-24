@@ -63,7 +63,9 @@ class RefundRequest implements BuilderInterface
             throw new \LogicException(__('Order payment should be provided.'));
         }
 
-        $baseSubtotal = $order->getBaseSubtotalInvoiced();
+        $baseTotalInvoiced = $order->getBaseTotalInvoiced();
+        $shipping = $order->getBaseShippingAmount();
+        $baseSubtotal = $baseTotalInvoiced - $shipping;
         $adjustments = $this->request->getParam('creditmemo');
         $shippingAmount = $adjustments['shipping_amount'];
         $adjustmentPositive = $adjustments['adjustment_positive'];
