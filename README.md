@@ -8,7 +8,8 @@ Released under the GPL V3 license: https://opensource.org/licenses/GPL-3.0
 
 ## Supported Magento versions
 
-- \>= 2.0.0
+* The plugin has been tested with most versions of Magento at every iteration. We recommend using the latest version of Magento, but if that is not possible for some reason, test the plugin with your Magento version and it would probably function properly. 
+* Magento version last tested on: *2.2.4*
 
 ## Installation
 
