@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Magento\MagentoQuickTest" file="/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoQuickTest.php" tests="2" assertions="0" errors="2" failures="0" skipped="0" time="49.316009">
+    <testcase name="testGeneralFunctions" class="Magento\MagentoQuickTest" classname="Magento.MagentoQuickTest" file="/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoQuickTest.php" line="27" assertions="0" time="12.421551">
+      <error type="Facebook\WebDriver\Exception\ElementNotVisibleException">Magento\MagentoQuickTest::testGeneralFunctions
+Facebook\WebDriver\Exception\ElementNotVisibleException: element not interactable: Element is not currently visible and may not be manipulated
+  (Session info: chrome=74.0.3729.169)
+  (Driver info: chromedriver=2.43.600229 (3fae4d0cda5334b4f533bede5a4787f7b832d052),platform=Mac OS X 10.13.6 x86_64)
+
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Exception/WebDriverException.php:110
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/HttpCommandExecutor.php:326
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/RemoteWebDriver.php:547
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/lmc/steward/src/WebDriver/RemoteWebDriver.php:29
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/RemoteExecuteMethod.php:40
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/RemoteWebElement.php:81
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/WebDriverSelect.php:244
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/WebDriverSelect.php:102
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoTestHelper.php:121
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:93
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:114
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:367
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:459
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:28
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoQuickTest.php:30
+</error>
+      <system-out>[2019-06-12 11:31:13] http://magento2.donotuse.dk
+[2019-06-12 11:31:13] http://magento2.donotuse.dk
+[2019-06-12 11:31:13] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin"
+[2019-06-12 11:31:18] http://magento2.donotuse.dk
+[2019-06-12 11:31:18] http://magento2.donotuse.dk
+[2019-06-12 11:31:18] http://magento2.donotuse.dk
+[2019-06-12 11:31:18] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/payment/"
+[2019-06-12 11:31:21] ----VERSIONS----
+[2019-06-12 11:31:21] Magento  2.3.1
+[2019-06-12 11:31:21] Paylike 1.0.0 
+[2019-06-12 11:31:21] http://magento2.donotuse.dk
+[2019-06-12 11:31:21] http://magento2.donotuse.dk
+[2019-06-12 11:31:21] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/system"
+[2019-06-12 11:31:23] http://magento2.donotuse.dk
+[2019-06-12 11:31:23] http://magento2.donotuse.dk
+[2019-06-12 11:31:23] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/payment"
+[2019-06-12 11:31:25] 
+[2019-06-12 11:31:25] [WARN] Test failed on page "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/payment", taking page snapshots:
+[2019-06-12 11:31:25] Screenshot: "/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/logs/Magento-MagentoQuickTest-testGeneralFunctions-2019-06-12-11-31-25.png"
+[2019-06-12 11:31:25] HTML snapshot: "/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/logs/Magento-MagentoQuickTest-testGeneralFunctions-2019-06-12-11-31-25.html"
+[2019-06-12 11:31:25] 
+[2019-06-12 11:31:25] Destroying "chrome" WebDriver for session "c9a6e2b791297c8e073332d43c1d9d69"
+[2019-06-12 11:31:26] --- Finished execution of test "testGeneralFunctions" ---
+</system-out>
+    </testcase>
+    <testcase name="testUsdPaymentBeforeOrderInstant" class="Magento\MagentoQuickTest" classname="Magento.MagentoQuickTest" file="/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoQuickTest.php" line="40" assertions="0" time="36.894458">
+      <error type="Facebook\WebDriver\Exception\NoSuchElementException">Magento\MagentoQuickTest::testUsdPaymentBeforeOrderInstant
+Facebook\WebDriver\Exception\NoSuchElementException: no such element: Unable to locate element: {"method":"css selector","selector":".message-success"}
+  (Session info: chrome=74.0.3729.169)
+  (Driver info: chromedriver=2.43.600229 (3fae4d0cda5334b4f533bede5a4787f7b832d052),platform=Mac OS X 10.13.6 x86_64)
+
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Exception/WebDriverException.php:102
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/HttpCommandExecutor.php:326
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/RemoteWebDriver.php:547
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/lmc/steward/src/WebDriver/RemoteWebDriver.php:29
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/Remote/RemoteWebDriver.php:187
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/WebDriverExpectedCondition.php:185
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/vendor/facebook/webdriver/lib/WebDriverWait.php:67
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoTestHelper.php:266
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:256
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:378
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:461
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoRunner.php:28
+/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/tests/MagentoQuickTest.php:43
+</error>
+      <system-out>[2019-06-12 11:31:27] http://magento2.donotuse.dk
+[2019-06-12 11:31:27] http://magento2.donotuse.dk
+[2019-06-12 11:31:27] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin"
+[2019-06-12 11:31:32] http://magento2.donotuse.dk
+[2019-06-12 11:31:32] http://magento2.donotuse.dk
+[2019-06-12 11:31:32] http://magento2.donotuse.dk
+[2019-06-12 11:31:32] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/payment/"
+[2019-06-12 11:31:34] ----VERSIONS----
+[2019-06-12 11:31:34] Magento  2.3.1
+[2019-06-12 11:31:34] Paylike 1.0.0 
+[2019-06-12 11:31:34] http://magento2.donotuse.dk
+[2019-06-12 11:31:34] http://magento2.donotuse.dk
+[2019-06-12 11:31:34] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/system"
+[2019-06-12 11:31:37] http://magento2.donotuse.dk
+[2019-06-12 11:31:37] http://magento2.donotuse.dk
+[2019-06-12 11:31:37] [WebDriver] Loading URL "http://magento2.donotuse.dk/admin/admin/system_config/edit/section/payment"
+[2019-06-12 11:31:41] http://magento2.donotuse.dk
+[2019-06-12 11:31:41] http://magento2.donotuse.dk
+[2019-06-12 11:31:41] [WebDriver] Loading URL "http://magento2.donotuse.dk//"
+[2019-06-12 11:31:45] http://magento2.donotuse.dk
+[2019-06-12 11:31:45] http://magento2.donotuse.dk
+[2019-06-12 11:31:45] [WebDriver] Loading URL "http://magento2.donotuse.dk/fusion-backpack.html"
+[2019-06-12 11:32:04] 
+[2019-06-12 11:32:04] [WARN] Test failed on page "http://magento2.donotuse.dk/fusion-backpack.html", taking page snapshots:
+[2019-06-12 11:32:04] Screenshot: "/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/logs/Magento-MagentoQuickTest-testUsdPaymentBeforeOrderInstant-2019-06-12-11-32-03.png"
+[2019-06-12 11:32:04] HTML snapshot: "/Volumes/Projects/Repo's/paylike/magento/paylike-magento-2.*-git/logs/Magento-MagentoQuickTest-testUsdPaymentBeforeOrderInstant-2019-06-12-11-32-03.html"
+[2019-06-12 11:32:04] 
+[2019-06-12 11:32:04] Destroying "chrome" WebDriver for session "cc1906a26624b4820786676bf2278c59"
+[2019-06-12 11:32:04] --- Finished execution of test "testUsdPaymentBeforeOrderInstant" ---
+</system-out>
+    </testcase>
+  </testsuite>
+</testsuites>
