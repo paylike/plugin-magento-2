@@ -193,8 +193,8 @@ class MagentoRunner extends MagentoTestHelper {
 	 */
 	public function logInFrontend() {
 		$this->goToPage( 'customer/account/login/' );
-		$this->type( '#email', 'ionut.plati@gmail.com' );
-		$this->type( '#pass', 'admin#522' );
+		$this->type( '#email', $this->client_user);
+		$this->type( '#pass', $this->client_pass );
 		$this->click( '#send2' );
 		$this->waitForPage( 'customer/account/' );
 	}
