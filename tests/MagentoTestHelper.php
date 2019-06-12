@@ -42,9 +42,9 @@ class MagentoTestHelper {
 		$this->base_url     = getenv( 'ENVIRONMENT_URL' );
 		$this->admin_prefix = getenv( 'ADMIN_PREFIX' );
 		$this->user         = getenv( 'ENVIRONMENT_USER' );
-		$this->client_user         = getenv( 'ENVIRONMENT_CLIENT_USER' );
+		$this->client_user  = getenv( 'ENVIRONMENT_CLIENT_USER' );
 		$this->pass         = getenv( 'ENVIRONMENT_PASS' );
-		$this->client_pass         = getenv( 'ENVIRONMENT_CLIENT_PASS' );
+		$this->client_pass  = getenv( 'ENVIRONMENT_CLIENT_PASS' );
 	}
 
 
@@ -58,7 +58,7 @@ class MagentoTestHelper {
 	 */
 	public function goToPage( $pagePath, $waitForSelector = null, $admin = false ) {
 		if ( $admin ) {
-			$pagePath =$this->admin_prefix.'/'. $pagePath;
+			$pagePath = $this->admin_prefix . '/' . $pagePath;
 		}
 		$url = $this->helperGetUrl( $pagePath );
 		if ( $url != $this->wd->getCurrentURL() ) {
@@ -180,7 +180,7 @@ class MagentoTestHelper {
 
 	public function uncheck( $selector ) {
 		$checkbox = $this->find( $selector );
-		if ( !$checkbox->isSelected() ) {
+		if ( ! $checkbox->isSelected() ) {
 		} else {
 			$checkbox->click();
 		}
@@ -260,9 +260,9 @@ class MagentoTestHelper {
 	 * @throws NoSuchElementException
 	 * @throws TimeOutException
 	 */
-	public function waitForElement( $query ) {
+	public function waitForElement( $query, $time = 15 ) {
 		$element = $this->getElement( $query );
-		$this->wd->wait( 15, 1000 )->until(
+		$this->wd->wait( $time, 1000 )->until(
 			WebDriverExpectedCondition::visibilityOfElementLocated( $element )
 		);
 
@@ -384,7 +384,7 @@ class MagentoTestHelper {
 	 */
 	private function helperGetUrl( $page, $admin = false ) {
 		if ( $admin ) {
-			$page =$this->admin_prefix.'/'. $page;
+			$page = $this->admin_prefix . '/' . $page;
 		}
 		$this->main_test->log( '%s', $this->base_url );
 
