@@ -45,7 +45,6 @@ class MagentoRunner extends MagentoTestHelper {
 	/**
 	 * @throws NoSuchElementException
 	 * @throws TimeOutException
-	 * @throws UnexpectedTagNameException
 	 */
 	public function changeCurrency() {
 		$driver = $this->wd;
