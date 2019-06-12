@@ -1,3 +1,5 @@
+logs
 .idea
-.DS_Store
-Esparks/.DS_Store
+.env
+.env.production
+vendor
