@@ -9,14 +9,14 @@
     <system>
         <section id="payment">
             <group id="paylikepaymentmethod" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                
                 <label>Paylike</label>
-                
+
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Paylike</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <frontend_class>paylike-version version-1.0.0</frontend_class>
                 </field>
-                
+
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Payment method title</label>
                 </field>
@@ -26,7 +26,7 @@
                     <label>Payment method credit card logos</label>
                     <source_model>Esparks\Paylike\Model\Adminhtml\Source\AcceptedCards</source_model>
                 </field>
-                
+
                 <field id="description" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Payment method description</label>
                 </field>
@@ -35,7 +35,7 @@
                     <label>Payment popup title</label>
                     <comment>The text shown in the popup where the customer inserts the card details</comment>
                 </field>
-                
+
                 <field id="transaction_mode" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Transaction mode</label>
                     <source_model>Esparks\Paylike\Model\Adminhtml\Source\TransactionMode</source_model>
@@ -55,7 +55,7 @@
                 <field id="live_api_key" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Live mode Public Key</label>
                     <comment>Get it from your Paylike dashboard</comment>
-                </field>  
+                </field>
 
                 <field id="live_app_key" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Live mode App Key</label>
@@ -67,7 +67,7 @@
                     <source_model>Esparks\Paylike\Model\Adminhtml\Source\CaptureMode</source_model>
                     <comment>If you deliver your product instantly (e.g. a digital product), choose Instant mode. If not, use Delayed. The capture in delayed mode is done when an invoice is created.</comment>
                 </field>
-                
+
                 <field id="sort_order" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sort Order</label>
                     <frontend_class>validate-number</frontend_class>
