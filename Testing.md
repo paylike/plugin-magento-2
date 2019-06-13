@@ -6,6 +6,8 @@ As you can see the plugin is bundled with selenium testing on this repository. Y
 ## Requirements
 
 * A magento installation is required, in which you need to have the sample theme installed. 
+* You also need to have a test client account with previous purchases and an admin account for which you set the credentials in the .env file
+* Lastly you need to have the currency selector available on the frontend
 
 ## Getting started
 
@@ -15,6 +17,8 @@ As you can see the plugin is bundled with selenium testing on this repository. Y
 ENVIRONMENT_URL="https://magento.url"
 ENVIRONMENT_USER="username"
 ENVIRONMENT_PASS="yourpassword"
+ENVIRONMENT_CLIENT_USER="client_email"
+ENVIRONMENT_CLIENT_PASS="client_pass"
 `
 
 3. Start the testing server. See

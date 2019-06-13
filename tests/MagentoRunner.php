@@ -45,7 +45,6 @@ class MagentoRunner extends MagentoTestHelper {
 	/**
 	 * @throws NoSuchElementException
 	 * @throws TimeOutException
-	 * @throws UnexpectedTagNameException
 	 */
 	public function changeCurrency() {
 		$driver = $this->wd;
@@ -193,14 +192,15 @@ class MagentoRunner extends MagentoTestHelper {
 	 */
 	public function logInFrontend() {
 		$this->goToPage( 'customer/account/login/' );
-		$this->type( '#email', $this->client_user);
+		$this->type( '#email', $this->client_user );
 		$this->type( '#pass', $this->client_pass );
 		$this->click( '#send2' );
 		$this->waitForPage( 'customer/account/' );
 	}
 
 	public function chooseShipping() {
-		$this->waitForElement( '//td[contains(text(), "Fixed")]' );
+		$this->waitElementDisappear( '.loading-mask' );
+		$this->waitForElement( '//td[contains(text(), "Fixed")]',30 );
 		$this->click( '//td[contains(text(), "Fixed")]' );
 		$this->click( '.actions-toolbar button.continue' );
 	}
@@ -253,7 +253,14 @@ class MagentoRunner extends MagentoTestHelper {
 	public function addToCart() {
 
 		$this->click( "#product-addtocart-button" );
-		$this->waitForElement( ".message-success" );
+		try {
+			$this->waitForElement( ".message-success", 5 );
+		} catch ( NoSuchElementException $exception ) {
+			$this->wd->navigate()->refresh();
+			$this->waitForElement( "#product-addtocart-button" );
+			$this->addToCart();
+		}
+
 
 	}
 

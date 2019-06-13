@@ -41,11 +41,11 @@ class MagentoFullTest extends AbstractTestCase {
 	public function testUsdPaymentBeforeOrderInstant() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
-				'first_test'             => true,
-				'currency'               => 'USD',
-				'stop_emails'            => true,
-				'capture_mode'           => 'instant',
-				'checkout_mode'          => 'before_order',
+				'first_test'    => true,
+				'currency'      => 'USD',
+				'stop_emails'   => true,
+				'capture_mode'  => 'instant',
+				'checkout_mode' => 'before_order',
 			)
 		);
 	}
@@ -58,8 +58,8 @@ class MagentoFullTest extends AbstractTestCase {
 	public function testUsdPaymentBeforeOrderDelayed() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
-				'capture_mode'           => 'delayed',
-				'checkout_mode'          => 'before_order',
+				'capture_mode'  => 'delayed',
+				'checkout_mode' => 'before_order',
 			)
 		);
 	}
@@ -74,9 +74,9 @@ class MagentoFullTest extends AbstractTestCase {
 	public function testEURPaymentBeforeOrderInstant() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
-				'currency'               => 'EUR',
-				'capture_mode'           => 'instant',
-				'checkout_mode'          => 'before_order',
+				'currency'      => 'EUR',
+				'capture_mode'  => 'instant',
+				'checkout_mode' => 'before_order',
 			)
 		);
 	}
@@ -90,9 +90,9 @@ class MagentoFullTest extends AbstractTestCase {
 	public function testEURPaymentBeforeOrderDelayed() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
-				'currency'               => 'EUR',
-				'capture_mode'           => 'delayed',
-				'checkout_mode'          => 'before_order',
+				'currency'      => 'EUR',
+				'capture_mode'  => 'delayed',
+				'checkout_mode' => 'before_order',
 			)
 		);
 	}
@@ -123,10 +123,11 @@ class MagentoFullTest extends AbstractTestCase {
 	public function testJpyPaymentBeforeOrderDelayed() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
-				'currency'               => 'JPY',
-				'capture_mode'           => 'delayed',
-				'checkout_mode'          => 'before_order',
-				'stop_emails'            => true,
+				'currency'      => 'JPY',
+				'capture_mode'  => 'delayed',
+				'checkout_mode' => 'before_order',
+				'stop_emails'   => true,
+				'log_version'   => true,
 			)
 		);
 	}
