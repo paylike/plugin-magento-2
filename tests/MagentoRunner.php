@@ -200,7 +200,7 @@ class MagentoRunner extends MagentoTestHelper {
 
 	public function chooseShipping() {
 		$this->waitElementDisappear( '.loading-mask' );
-		$this->waitForElement( '//td[contains(text(), "Fixed")]' );
+		$this->waitForElement( '//td[contains(text(), "Fixed")]',30 );
 		$this->click( '//td[contains(text(), "Fixed")]' );
 		$this->click( '.actions-toolbar button.continue' );
 	}
