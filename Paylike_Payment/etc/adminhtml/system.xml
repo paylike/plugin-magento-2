@@ -68,6 +68,12 @@
                     <comment>If you deliver your product instantly (e.g. a digital product), choose Instant mode. If not, use Delayed. The capture in delayed mode is done when an invoice is created.</comment>
                 </field>
 
+                <field id="order_status" translate="label" type="select" sortOrder="111" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>New Order Status</label>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
+                </field>
+
+
                 <field id="sort_order" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sort Order</label>
                     <frontend_class>validate-number</frontend_class>
