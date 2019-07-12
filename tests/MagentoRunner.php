@@ -134,6 +134,8 @@ class MagentoRunner extends MagentoTestHelper {
 	 */
 	public function selectOrder() {
 		$this->goToPage( 'sales/order/', '.admin__data-grid-wrap a.action-menu-item', true );
+
+		$this->waitElementDisappear( '.admin__data-grid-loading-mask' );
 		$this->click( '.admin__data-grid-wrap a.action-menu-item' );
 	}
 
