@@ -8,6 +8,7 @@ use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\Exception\UnexpectedTagNameException;
+use Facebook\WebDriver\Exception\UnknownServerException;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverDimension;
@@ -48,8 +49,13 @@ class MagentoRunner extends MagentoTestHelper {
 	 */
 	public function changeCurrency() {
 		$driver = $this->wd;
-		$this->goToPage( '/', '#switcher-currency-trigger' );
-		$this->click( '##switcher-currency-trigger' );
+		$this->goToPage( '', '#switcher-currency-trigger' );
+		$this->click( '#switcher-currency-trigger' );
+		try {
+			$this->waitForElement( '.switcher-dropdown',2 );
+		}catch (TimeOutException $e){
+			$this->click( '#switcher-currency-trigger' );
+		}
 		$currency_not_in_default = 0;
 		try {
 			$currency_element = $driver->findElement( WebDriverBy::xpath( "//*[@id='switcher-currency']//strong//span[text()[contains(.,'" . $this->currency . "')]]" ) );
@@ -133,10 +139,17 @@ class MagentoRunner extends MagentoTestHelper {
 	 * @throws TimeOutException
 	 */
 	public function selectOrder() {
+
+
 		$this->goToPage( 'sales/order/', '.admin__data-grid-wrap a.action-menu-item', true );
 
+		$this->waitForElement( '.admin__data-grid-wrap a.action-menu-item' );
 		$this->waitElementDisappear( '.admin__data-grid-loading-mask' );
-		$this->click( '.admin__data-grid-wrap a.action-menu-item' );
+		try {
+			$this->click( '.admin__data-grid-wrap a.action-menu-item' );
+		}catch (UnknownServerException $exception){
+			$this->selectOrder();
+		}
 	}
 
 	/**
@@ -202,7 +215,7 @@ class MagentoRunner extends MagentoTestHelper {
 
 	public function chooseShipping() {
 		$this->waitElementDisappear( '.loading-mask' );
-		$this->waitForElement( '//td[contains(text(), "Fixed")]',30 );
+		$this->waitForElement( '//td[contains(text(), "Fixed")]', 30 );
 		$this->click( '//td[contains(text(), "Fixed")]' );
 		$this->click( '.actions-toolbar button.continue' );
 	}

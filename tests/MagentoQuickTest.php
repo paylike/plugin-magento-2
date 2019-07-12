@@ -27,21 +27,22 @@ class MagentoQuickTest extends AbstractTestCase {
 	public function testGeneralFunctions() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
-				'settings_check' => true
+				'settings_check' => true,
+				'currency'      => 'EUR',
 			)
 		);
 	}
 
-	/**
-	 * @throws NoSuchElementException
-	 * @throws TimeOutException
-	 * @throws UnexpectedTagNameException
-	 */
-	public function testUsdPaymentBeforeOrderInstant() {
-		$this->runner = new MagentoRunner( $this );
-		$this->runner->ready( array(
-				'capture_mode'           => 'instant',
-			)
-		);
-	}
+//	/**
+//	 * @throws NoSuchElementException
+//	 * @throws TimeOutException
+//	 * @throws UnexpectedTagNameException
+//	 */
+//	public function testUsdPaymentBeforeOrderInstant() {
+//		$this->runner = new MagentoRunner( $this );
+//		$this->runner->ready( array(
+//				'capture_mode'           => 'instant',
+//			)
+//		);
+//	}
 }
