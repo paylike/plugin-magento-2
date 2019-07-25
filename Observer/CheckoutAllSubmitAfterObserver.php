@@ -68,6 +68,9 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
         $order = $observer->getEvent()->getOrder();
+		if(!isset($order)){
+			return $this;
+		}
         $payment = $order->getPayment();
         $method = $payment->getMethodInstance();
         $methodName = $payment->getMethod();
