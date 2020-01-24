@@ -18,19 +18,19 @@ class MagentoFullTest extends AbstractTestCase {
 
 	public $runner;
 
-//	/**
-//	 * @throws NoSuchElementException
-//	 * @throws TimeOutException
-//	 * @throws UnexpectedTagNameException
-//	 */
-//	public function testGeneralFunctions() {
-//		$this->runner = new MagentoRunner( $this );
-//		$this->runner->ready( array(
-//				'settings_check' => true,
-//			)
-//		);
-//	}
-//
+	/**
+	 * @throws NoSuchElementException
+	 * @throws TimeOutException
+	 * @throws UnexpectedTagNameException
+	 */
+	public function testGeneralFunctions() {
+		$this->runner = new MagentoRunner( $this );
+		$this->runner->ready( array(
+				'settings_check' => true,
+			)
+		);
+	}
+
 
 	/**
 	 *
@@ -59,23 +59,6 @@ class MagentoFullTest extends AbstractTestCase {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
 				'capture_mode'  => 'delayed',
-				'checkout_mode' => 'before_order',
-			)
-		);
-	}
-
-
-	/**
-	 *
-	 * @throws NoSuchElementException
-	 * @throws TimeOutException
-	 * @throws UnexpectedTagNameException
-	 */
-	public function testEURPaymentBeforeOrderInstant() {
-		$this->runner = new MagentoRunner( $this );
-		$this->runner->ready( array(
-				'currency'      => 'EUR',
-				'capture_mode'  => 'instant',
 				'checkout_mode' => 'before_order',
 			)
 		);

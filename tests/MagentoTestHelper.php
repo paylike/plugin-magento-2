@@ -100,6 +100,8 @@ class MagentoTestHelper {
 		$element = $this->find( $selector );
 		if ( $moveTo ) {
 			$this->moveMouse( $element );
+
+			$this->waitForElement($selector);
 		}
 		$element->click();
 

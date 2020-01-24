@@ -3,6 +3,7 @@
 
 namespace Magento;
 
+use Facebook\WebDriver\Exception\ElementNotVisibleException;
 use Facebook\WebDriver\Exception\NoAlertOpenException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
@@ -83,6 +84,7 @@ class MagentoRunner extends MagentoTestHelper {
 	public function disableEmail() {
 		if ( $this->stop_email === true ) {
 			$this->goToPage( 'admin/system_config/edit/section/system', '#system_smtp-head', true );
+
 			$this->click( '#system_smtp-head' );
 			$this->uncheck( '#system_smtp_disable_inherit' );
 			$this->selectValue( '#system_smtp_disable', 1 );

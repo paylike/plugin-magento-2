@@ -57,6 +57,9 @@ abstract class AbstractTransaction implements ClientInterface
         $multiplier = $this->helper->getPaylikeCurrencyMultiplier($value['CURRENCY']);
 
         $amount = ceil( $value['AMOUNT'] * $multiplier );
+		if ( function_exists( 'bcmul' ) ) {
+			$amount = ceil( bcmul( $value['AMOUNT'], $multiplier ) );
+		}
         $data = array(
                 'amount'   => $amount,
                 'currency' => $value['CURRENCY']
