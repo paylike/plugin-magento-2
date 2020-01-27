@@ -14,7 +14,7 @@
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Paylike</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_class>paylike-version version-1.1.1</frontend_class>
+                    <frontend_class>paylike-version version-1.1.2</frontend_class>
                 </field>
 
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -71,7 +71,6 @@
                 <field id="invoice_email" translate="label" type="select" sortOrder="111" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Invoice emails</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>In Instant mode, orders are invoiced automatically. Set this option to yes if you want to send the invoice email to the customers</comment>
                 </field>
 
                 <field id="order_status" translate="label" type="select" sortOrder="112" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

@@ -33,7 +33,6 @@ Under the Magento Paylike payment method settings, you can:
  * Add test/live keys
  * Set payment mode (test/live)
  * Change the capture type (Instant/Manual by changing the order status)
- * Update invoice email setting for instant capture
  
  ## How to
  
