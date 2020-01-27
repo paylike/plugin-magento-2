@@ -1,8 +1,7 @@
-../.idea
+.idea
 .DS_Store
 Esparks/.DS_Store
 logs
-.idea
 .env
 .env.production
 vendor
