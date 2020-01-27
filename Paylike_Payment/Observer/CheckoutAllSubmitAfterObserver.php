@@ -33,6 +33,8 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
      */
     protected $invoiceService;
 
+    protected $invoiceSender;
+
     /**
      *
      * @var \Magento\Framework\DB\TransactionFactory
@@ -51,13 +53,15 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
-        \Magento\Framework\DB\TransactionFactory $transactionFactory
+        \Magento\Framework\DB\TransactionFactory $transactionFactory,
+        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
     ) {
         $this->logger = $logger;
         $this->scopeConfig = $scopeConfig;
         $this->invoiceCollectionFactory = $invoiceCollectionFactory;
         $this->invoiceService = $invoiceService;
         $this->transactionFactory = $transactionFactory;
+        $this->invoiceSender = $invoiceSender;
     }
 
     /**
@@ -107,6 +111,15 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
                 $invoice->getOrder()->setIsInProcess(true);
                 $transactionSave = $this->transactionFactory->create()->addObject($invoice)->addObject($invoice->getOrder());
                 $transactionSave->save();
+
+                $invoiceEmailmode =  $this->scopeConfig->getValue('payment/paylikepaymentmethod/invoice_email');
+                 if (!$invoice->getEmailSent() && $invoiceEmailmode=='1') {
+                    try {
+                        $this->invoiceSender->send($invoice);
+                    } catch (\Exception $e) {
+                        // Do something if failed to send                          
+                    }
+                }
             } catch (\Exception $e) {
                 $order->addStatusHistoryComment('Exception message: '.$e->getMessage(), false);
                 $order->save();
