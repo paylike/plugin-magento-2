@@ -12,9 +12,9 @@ use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
 /**
  * Class ConfigProvider
  */
-final class ConfigProvider implements ConfigProviderInterface {
+class ConfigProvider implements ConfigProviderInterface {
 	const CODE = 'paylikepaymentmethod';
-	const MAGENTO_PAYLIKE_VERSION = '1.1.2';
+	const MAGENTO_PAYLIKE_VERSION = '1.2.0';
 	protected $scopeConfig;
 	protected $_cart;
 	protected $_assetRepo;
@@ -175,6 +175,11 @@ final class ConfigProvider implements ConfigProviderInterface {
 
 	}
 
+	public function getPaylikeAmount( $currency,$amount ) {
+		return $this->helper->getPaylikeAmount( $currency,$amount );
+
+	}
+
 	/**
 	 * Retrieve config values for popup of Paylike
 	 *
@@ -185,14 +190,10 @@ final class ConfigProvider implements ConfigProviderInterface {
 		$quote    = $this->_getQuote();
 		$title    = $this->getPopupTitle();
 		$currency = $this->getStoreCurrentCurrency();
-		//$currency = $quote->getQuoteCurrencyCode();
 		$total      = $quote->getGrandTotal();
-		$multiplier = $this->getPaylikeMultiplier( $currency );
 
-		$amount = ceil( $total * $multiplier );
-		if ( function_exists( 'bcmul' ) ) {
-			$amount = ceil( bcmul( $total, $multiplier ) );
-		}
+		$amount = $this->getPaylikeAmount($currency,$total);
+
 		$email    = $quote->getBillingAddress()->getEmail();
 		$products = array();
 		foreach ( $quote->getAllVisibleItems() as $item ) {
