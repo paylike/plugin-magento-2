@@ -73,9 +73,6 @@ class RefundRequest implements BuilderInterface
         $baseAmount = $baseSubtotal + $shippingAmount + $adjustmentPositive - $adjustmentNegative;
         $rate = $order->getBaseToOrderRate();
         $amount = $baseAmount * $rate;
-		if ( function_exists( 'bcmul' ) ) {
-			$amount = bcmul( $baseAmount, $rate );
-		}
 
         return [
             'TXN_TYPE' => 'refund',
