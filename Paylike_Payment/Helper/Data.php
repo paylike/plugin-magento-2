@@ -2,9 +2,8 @@
 
 namespace Esparks\Paylike\Helper;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
-{
-    public function getPaylikeCurrency( $currency_iso_code ) {
+class Data extends \Magento\Framework\App\Helper\AbstractHelper {
+	public function getPaylikeCurrency( $currency_iso_code ) {
 		$currencies = array(
 			'AED' =>
 				array(
@@ -1110,5 +1109,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		} else {
 			return pow( 10, 2 );
 		}
+	}
+
+	public function getPaylikeAmount( $currency_iso_code, $total ) {
+		$multiplier = $this->getPaylikeCurrencyMultiplier( $currency_iso_code );
+		$amount = round( $multiplier * $total );
+		if ( function_exists( 'bcmul' ) ) {
+			$amount = round( bcmul( $total, $multiplier ) );
+		}
+
+		return $amount;
 	}
 }

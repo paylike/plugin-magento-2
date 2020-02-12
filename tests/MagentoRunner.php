@@ -254,7 +254,7 @@ class MagentoRunner extends MagentoTestHelper {
 		$expectedAmount = $this->getText( '.grand.totals .amount span.price' );
 		$expectedAmount = preg_replace( "/[^0-9.]/", "", $expectedAmount );
 		$expectedAmount = trim( $expectedAmount, '.' );
-		$expectedAmount = ceil( round( $expectedAmount, 3 ) * get_paylike_currency_multiplier( $this->currency ) );
+		$expectedAmount = round( round( $expectedAmount, 3 ) * get_paylike_currency_multiplier( $this->currency ) );
 		$this->main_test->assertEquals( $expectedAmount, $amount, "Checking minor amount for " . $this->currency );
 
 		$this->popupPaylike();
