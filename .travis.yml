@@ -7,6 +7,8 @@ php:
 
 addons:
   chrome: stable
+  artifacts:
+    debug: true
 
 env:
   global:
