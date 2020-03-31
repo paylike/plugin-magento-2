@@ -84,9 +84,18 @@ class MagentoTestHelper {
 	 * @throws TimeOutException
 	 */
 	public function waitForPage( $pagePath, $admin = false ) {
-		$this->wd->wait( 10, 500 )->until(
-			WebDriverExpectedCondition::urlIs( $this->helperGetUrl( $pagePath, $admin ) )
-		);
+        $url = $this->helperGetUrl( $pagePath,$admin );
+        $url = explode( '@', $url );
+        if ( count( $url ) > 1 ) {
+            $left = explode( '://', $url[0] );
+            $url = $left[0] . '://' . $url[1];
+        } else {
+            $url = $url[0];
+        }
+
+        $this->wd->wait( 5, 500 )->until(
+            WebDriverExpectedCondition::urlIs( $url )
+        );
 
 		return $this;
 	}
