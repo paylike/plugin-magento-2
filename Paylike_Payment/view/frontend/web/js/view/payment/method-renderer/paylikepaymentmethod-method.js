@@ -37,7 +37,13 @@ define(
             },
 
             getCardLogos: function () {
-                var logos = window.checkoutConfig.cards.split(',');
+                var logosString = window.checkoutConfig.cards;
+
+                if (!logosString) {
+                    return '';
+                }
+
+                var logos = logosString.split(',');
                 var imghtml = "";
                 if (logos.length > 0) {
                     for (var i = 0; i < logos.length; i++) {
