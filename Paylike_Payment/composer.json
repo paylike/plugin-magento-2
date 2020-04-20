@@ -4,7 +4,8 @@
     "require": {
         "magento/module-sales": ">100.0.0",
         "magento/module-checkout": ">100.0.0",
-        "magento/module-payment": ">100.0.0"
+        "magento/module-payment": ">100.0.0",
+        "paylike/php-api": "^1.0.3"
     },
     "type": "magento2-module",
     "version": "1.2.0",
@@ -15,6 +16,12 @@
         "files": [ "registration.php" ],
         "psr-4": {
             "Esparks\\Paylike\\": ""
+        }
+    },
+    "repositories": {
+        "php-api": {
+            "type": "git",
+            "url": "https://github.com/paylike/php-api.git"
         }
     }
 }
