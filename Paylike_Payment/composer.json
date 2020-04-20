@@ -17,11 +17,5 @@
         "psr-4": {
             "Esparks\\Paylike\\": ""
         }
-    },
-    "repositories": {
-        "php-api": {
-            "type": "git",
-            "url": "https://github.com/paylike/php-api.git"
-        }
     }
 }
