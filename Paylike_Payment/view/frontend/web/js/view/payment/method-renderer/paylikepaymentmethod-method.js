@@ -10,13 +10,15 @@ define(
         'jquery',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/action/place-order'
+        'Magento_Checkout/js/action/place-order',
+        'Magento_Checkout/js/model/customer-email-validator'
     ],
     function (ko,
               $,
               Component,
               quote,
-              placeOrderAction) {
+              placeOrderAction,
+              customerEmailValidator) {
         'use strict';
 
         return Component.extend({
@@ -35,7 +37,13 @@ define(
             },
 
             getCardLogos: function () {
-                var logos = window.checkoutConfig.cards.split(',');
+                var logosString = window.checkoutConfig.cards;
+
+                if (!logosString) {
+                    return '';
+                }
+
+                var logos = logosString.split(',');
                 var imghtml = "";
                 if (logos.length > 0) {
                     for (var i = 0; i < logos.length; i++) {
@@ -47,6 +55,10 @@ define(
             },
 
             displayPopup: function () {
+                if (!customerEmailValidator.validate()) {
+                    return false;
+                }
+
                 var self = this;
                 var paylike = Paylike(window.checkoutConfig.publicapikey);
                 var paylikeConfig = window.checkoutConfig.config;
