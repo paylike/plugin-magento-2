@@ -63,8 +63,8 @@ define(
                 var paylike = Paylike(window.checkoutConfig.publicapikey);
                 var paylikeConfig = window.checkoutConfig.config;
                 var multiplier = window.checkoutConfig.multiplier;
-                var grandTotal = quote.totals()['grand_total'];
-                var taxAmount = quote.totals()['tax_amount'];
+                var grandTotal = parseFloat(quote.totals()['grand_total']);
+                var taxAmount = parseFloat(quote.totals()['tax_amount']);
                 var totalAmount = grandTotal + taxAmount;
                 paylikeConfig.amount = Math.round(totalAmount * multiplier);
                 window.paylikeminoramount = paylikeConfig.amount;
