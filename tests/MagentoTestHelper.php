@@ -93,7 +93,7 @@ class MagentoTestHelper {
             $url = $url[0];
         }
 
-        $this->wd->wait( 5, 500 )->until(
+        $this->wd->wait( 10, 500 )->until(
             WebDriverExpectedCondition::urlIs( $url )
         );
 

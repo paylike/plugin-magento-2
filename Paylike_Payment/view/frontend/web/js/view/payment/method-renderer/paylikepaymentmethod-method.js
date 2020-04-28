@@ -80,7 +80,6 @@ define(
 
                     if (res.transaction.id !== undefined && res.transaction.id !== "") {
                         self.payliketransactionid = res.transaction.id;
-                        console.log("transaction id: ", self.payliketransactionid);
                         self.placeOrder();
                     }
 
