@@ -24,20 +24,6 @@ class MagentoQuickTest extends AbstractTestCase {
 	 * @throws TimeOutException
 	 * @throws UnexpectedTagNameException
 	 */
-	public function testGeneralFunctions() {
-		$this->runner = new MagentoRunner( $this );
-		$this->runner->ready( array(
-				'settings_check' => true,
-				'currency'       => 'EUR',
-			)
-		);
-	}
-
-	/**
-	 * @throws NoSuchElementException
-	 * @throws TimeOutException
-	 * @throws UnexpectedTagNameException
-	 */
 	public function testUsdPaymentBeforeOrderInstant() {
 		$this->runner = new MagentoRunner( $this );
 		$this->runner->ready( array(
