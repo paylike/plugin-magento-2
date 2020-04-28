@@ -1,8 +1,90 @@
-<?php
+<?php namespace Esparks\Paylike\Helper;
 
-namespace Esparks\Paylike\Helper;
+use Psr\Log\LoggerInterface as Logger;
+use Paylike\Exception\ApiException;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper {
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
+{
+    /**
+     * @var Logger
+     */
+	public $logger;
+
+    /**
+	 * Used to validate the test public key.
+	 *
+	 * @var array
+	 */
+	public static $validation_test_public_keys = array();
+
+	/**
+	 * Used to validate the live public key.
+	 *
+	 * @var array
+	 */
+	public static $validation_live_public_keys = array();
+
+
+	/**
+	 * Constructor
+	 *
+	 * @param Logger $config
+	 */
+	public function __construct( Logger $logger )
+	{
+		$this->logger = $logger;
+	}
+
+	/**
+	 * Log exceptions.
+	 *
+	 * @param \Paylike\Exception\ApiException $exception
+	 * @param string                          $context
+	 *
+	 * @return void
+	 */
+	public function handle_exceptions( ApiException $exception, $context = '' ) {
+		if ( ! $exception ) {
+			return false;
+		}
+		$exception_type = get_class( $exception );
+		$message        = '';
+		switch ( $exception_type ) {
+			case 'Paylike\\Exception\\NotFound':
+				$message = __( "Transaction not found! Check the transaction key used for the operation." );
+				break;
+			case 'Paylike\\Exception\\InvalidRequest':
+				$message = __( "The request is not valid! Check if there is any validation bellow this message and adjust if possible, if not, and the problem persists, contact the developer." );
+				break;
+			case 'Paylike\\Exception\\Forbidden':
+				$message = __( "The operation is not allowed! You do not have the rights to perform the operation, make sure you have all the grants required on your Paylike account." );
+				break;
+			case 'Paylike\\Exception\\Unauthorized':
+				$message = __( "The operation is not properly authorized! Check the credentials set in settings for Paylike." );
+				break;
+			case 'Paylike\\Exception\\Conflict':
+				$message = __( "The operation leads to a conflict! The same transaction is being requested for modification at the same time. Try again later." );
+				break;
+			case 'Paylike\\Exception\\ApiConnection':
+				$message = __( "Network issues ! Check your connection and try again." );
+				break;
+			case 'Paylike\\Exception\\ApiException':
+				$message = __( "There has been a server issue! If this problem persists contact the developer." );
+				break;
+		}
+
+		$message = __( 'Error: ' ) . $message;
+
+		if ( $context ) {
+			$message = $context . PHP_EOL . $message;
+		}
+
+		/** Log the occured error. */
+		$this->logger->error( $message );
+
+		return __( $message );
+	}
+
 	public function getPaylikeCurrency( $currency_iso_code ) {
 		$currencies = array(
 			'AED' =>

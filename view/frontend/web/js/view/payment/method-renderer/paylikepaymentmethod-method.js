@@ -10,13 +10,15 @@ define(
         'jquery',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/action/place-order'
+        'Magento_Checkout/js/action/place-order',
+        'Magento_Checkout/js/model/customer-email-validator'
     ],
     function (ko,
               $,
               Component,
               quote,
-              placeOrderAction) {
+              placeOrderAction,
+              customerEmailValidator) {
         'use strict';
 
         return Component.extend({
@@ -35,7 +37,13 @@ define(
             },
 
             getCardLogos: function () {
-                var logos = window.checkoutConfig.cards.split(',');
+                var logosString = window.checkoutConfig.cards;
+
+                if (!logosString) {
+                    return '';
+                }
+
+                var logos = logosString.split(',');
                 var imghtml = "";
                 if (logos.length > 0) {
                     for (var i = 0; i < logos.length; i++) {
@@ -47,12 +55,16 @@ define(
             },
 
             displayPopup: function () {
+                if (!customerEmailValidator.validate()) {
+                    return false;
+                }
+
                 var self = this;
                 var paylike = Paylike(window.checkoutConfig.publicapikey);
                 var paylikeConfig = window.checkoutConfig.config;
                 var multiplier = window.checkoutConfig.multiplier;
-                var grandTotal = quote.totals()['grand_total'];
-                var taxAmount = quote.totals()['tax_amount'];
+                var grandTotal = parseFloat(quote.totals()['grand_total']);
+                var taxAmount = parseFloat(quote.totals()['tax_amount']);
                 var totalAmount = grandTotal + taxAmount;
                 paylikeConfig.amount = Math.round(totalAmount * multiplier);
                 window.paylikeminoramount = paylikeConfig.amount;
@@ -68,7 +80,6 @@ define(
 
                     if (res.transaction.id !== undefined && res.transaction.id !== "") {
                         self.payliketransactionid = res.transaction.id;
-                        console.log("transaction id: ", self.payliketransactionid);
                         self.placeOrder();
                     }
 
