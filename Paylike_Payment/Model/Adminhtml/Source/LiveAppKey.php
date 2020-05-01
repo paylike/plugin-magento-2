@@ -74,7 +74,7 @@ class LiveAppKey extends \Magento\Framework\App\Config\Value
 			$merchants = $paylike_client->merchants()->find( $identity['id'] );
 			if ( $merchants ) {
 				foreach ( $merchants as $merchant ) {
-					if ( $merchant['test'] ) {
+					if ( !$merchant['test'] ) {
 						Helper::$validation_live_public_keys[] = $merchant['key'];
 					}
 				}
