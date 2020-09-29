@@ -16,33 +16,33 @@ Released under the GPL V3 license: https://opensource.org/licenses/GPL-3.0
 ## Automatic installation
 
   Once you have installed Magento, follow these simple steps:
-  1. Signup at [paylike.io](https://paylike.io) (it’s free)
-  1. Create a live account
-  1. Create an app key for your Magento website
-  1. Upload the files trough the extension manager
-  1. Activate the module using trough the extension manager.
-  1. Insert the app key and your public key in the Payment module settings for the Paylike plugin
+  1. Signup at [paylike.io](https://paylike.io) (it’s free);
+  1. Create a live account;
+  1. Create an app key for your Magento website;
+  1. Upload the files trough the extension manager;
+  1. Activate the module using the extension manager;
+  1. The module should now be auto installed and visible under "Stores >> Configuration >> Sales >> Payment Methods", the module will be listed here inside the "OTHER PAYMENT METHODS" list;
+  1. Insert the app key and your public key in the Payment module settings for the Paylike plugin.
 
 ## Manual installation
 
   Once you have installed Magento, follow these simple steps:
-  1. Signup at [paylike.io](https://paylike.io) (it’s free)
-  1. Create a live account
-  1. Create an app key for your Magento website
-  1. Download/purchase the extension achive from Magento Marketplace;
+  1. Signup at [paylike.io](https://paylike.io) (it’s free);
+  1. Create a live account;
+  1. Create an app key for your Magento website;
+  1. Download/purchase the extension archive from the Magento Marketplace;
   1. Login to your Magento 2.x Hosting site (for details contact your hosting provider);
   1. Open some kind File Manager for listing Hosting files and directories and locate the Magento root directory where Magento 2.x is installed (also can be FTP or Filemanager in CPanel for example);
-  1. Unzip the file in temporary directory;
-  1. Upload the content of unzipped extension without original folder (only content of unzipped folder);
-into the Magneto “app/code/Esparks/Paylike/” folder (create empty folders "code/Esparks/Paylike/"):
-  1. Login to your Magento 2.x Hosting site using SSH connection (for details contact our hosting provider)
-  1. Run the following commands from root:
+  1. Unzip the file in temporary a directory;
+  1. Upload the content of unzipped extension without original folder (only content of unzipped folder) into the Magneto “app/code/Esparks/Paylike/” folder (create empty folders "code/Esparks/Paylike/");
+  1. Login to your Magento 2.x Hosting site using SSH connection (for details contact our hosting provider);
+  1. Run the following commands from the Magento root directory:
     * php bin/magento setup:upgrade
     * composer require paylike/php-api ^1.0.3
     * php bin/magento cache:clean
-  1. Now go and open the Magento 2.x Admin panel;
-  1. The module should now be auto installed and visible under Stores>>Configuration>>Sales>>Payment Methods, the module will be listed here in "OTHER PAYMENT METHODS" list;
-  1. Insert the app key and your public key in the Payment module settings for the Paylike plugin;
+  1. Open the Magento 2.x Admin panel;
+  1. The module should now be auto installed and visible under "Stores >> Configuration >> Sales >> Payment Methods", the module will be listed here inside the "OTHER PAYMENT METHODS" list;
+  1. Insert the app key and your public key in the Payment module settings for the Paylike plugin.
 
 ## Updating settings
 
