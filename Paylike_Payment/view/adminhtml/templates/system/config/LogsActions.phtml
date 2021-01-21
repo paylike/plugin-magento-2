@@ -1,0 +1,95 @@
+<style>
+  #paylike_buttons_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #paylike_logs_message {
+    margin-top: 8px;
+  }
+</style>
+<div id="paylike_buttons_container">
+  <button id="paylike_export_button" disabled>Export logs</button>
+  <button id="paylike_delete_button" disabled>Delete logs</button>
+</div>
+<p id="paylike_logs_message">this is a message</p>
+
+<script type="text/javascript">
+  const exportButton = jQuery("#paylike_export_button");
+  const deleteButton = jQuery("#paylike_delete_button");
+  const message = jQuery("#paylike_logs_message");
+
+  function download(filename, content) {
+      var a = document.createElement('a');
+      a.setAttribute('href', 'data:application/zip;base64, ' + content);
+      a.setAttribute('download', filename);
+      a.click();
+  }
+
+  function checkForLogs() {
+    jQuery.ajax({
+      url: "/paylike/index/Log",
+      type: 'POST',
+      dataType: 'text',
+      data: { "hasLogs": 1 },
+      success: function (data) {
+        if (!data) {
+          exportButton.attr("disabled", true);
+          deleteButton.attr("disabled", true);
+          message.html("No logs saved");
+        } else {
+          exportButton.attr("disabled", false);
+          deleteButton.attr("disabled", false);
+          message.html("");
+        }
+      }
+    });
+  }
+
+  checkForLogs();
+
+  deleteButton.on("click", (event) => {
+    event.preventDefault();
+
+    if (!confirm("Are you sure you want to delete the logs?")) {
+      return;
+    }
+
+    deleteButton.attr("disabled", true);
+    deleteButton.html("Loading...");
+
+    jQuery.ajax({
+      url: "/paylike/index/Log",
+      type: 'POST',
+      dataType: 'text',
+      data: { "delete": 1 },
+      success: function (data) {
+        message.html("Logs deleted");
+        deleteButton.html("Delete logs");
+
+        setTimeout(checkForLogs, 5000);
+      }
+    });
+  });
+
+  exportButton.on("click", (event) => {
+    event.preventDefault();
+
+    exportButton.attr("disabled", true);
+    exportButton.html("Loading...");
+
+    jQuery.ajax({
+      url: "/paylike/index/Log",
+      type: 'POST',
+      dataType: 'text',
+      data: { "export": 1 },
+      success: function (data) {
+        download("paylikeLogs.zip", data);
+
+        exportButton.attr("disabled", false);
+        exportButton.html("Export logs");
+      }
+    });
+  });
+</script>

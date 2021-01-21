@@ -123,6 +123,12 @@ class ConfigProvider implements ConfigProviderInterface {
 		return $title;
 	}
 
+	public function getLogsEnabled() {
+		$enabled = $this->scopeConfig->getValue( 'payment/paylikepaymentmethod/enable_logs', \Magento\Store\Model\ScopeInterface::SCOPE_STORE );
+
+		return $enabled === "1";
+	}
+
 	/**
 	 * Retrieve accepted credit cards from backend
 	 *
@@ -199,16 +205,19 @@ class ConfigProvider implements ConfigProviderInterface {
 		foreach ( $quote->getAllVisibleItems() as $item ) {
 			$product    = array(
 				'ID'       => $item->getProductId(),
+				'SKU'      => $item->getSku(),
 				'name'     => $item->getName(),
 				'quantity' => $item->getQty()
 			);
 			$products[] = $product;
 		}
 
+		$quoteId 			= $quote->getId();
 		$quote        = $this->cartRepositoryInterface->get( $quote->getId() );
 		$customerData = $quote->getCustomer();
 		$address      = $quote->getBillingAddress();
 		$name         = $customerData->getFirstName() . " " . $customerData->getLastName();
+		$logsEnabled  = $this->getLogsEnabled();
 
 		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 		$ip            = $objectManager->get( 'Magento\Framework\HTTP\PhpEnvironment\RemoteAddress' );
@@ -233,11 +242,13 @@ class ConfigProvider implements ConfigProviderInterface {
 		$version = SELF::MAGENTO_PAYLIKE_VERSION;
 
 		return [
-			'title'    => $title,
-			'currency' => $currency,
-			'amount'   => $amount,
-			'locale'   => $this->locale->getLocale(),
-			'custom'   => [
+			'title'    		=> $title,
+			'currency' 		=> $currency,
+			'amount'   		=> $amount,
+			'locale'   		=> $this->locale->getLocale(),
+			'logsEnabled' => $logsEnabled,
+			'quoteId' 		=> $quoteId,
+			'custom'   		=> [
 				'products'  => $products,
 				'customer'  => $customer,
 				'platform'  => $platform,
