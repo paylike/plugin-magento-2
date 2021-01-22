@@ -95,18 +95,31 @@ define(
                     if (res.transaction.id !== undefined && res.transaction.id !== "") {
                         self.payliketransactionid = res.transaction.id;
                         PaylikeLogger.log("Paylike payment successfull. Transaction ID: " + res.transaction.id);
-                        self.redirectAfterPlaceOrder = false;
+                        /*
+                          In order to intercept the error of placeOrder request we need to monkey-patch
+                          the `addErrorMessage` function of the messageContainer:
+                           - first we duplicate the function on the same `messageContainer`, keeping the same `this`
+                           - next we override the function with a new one, were we log the error, and then we call the old function
+                        */
                         self.messageContainer.oldAddErrorMessage = self.messageContainer.addErrorMessage;
                         self.messageContainer.addErrorMessage = async function (messageObj) {
                           await PaylikeLogger.log("Place order failed. Reason: " + messageObj.message);
 
                           self.messageContainer.oldAddErrorMessage(message);
                         }
+
+                        /*
+                          In order to log the placeOrder success, we need deactivate
+                          the redirect after order placed and call it manually, after
+                          we send the logs to the server
+                        */
+                        self.redirectAfterPlaceOrder = false;
                         self.afterPlaceOrder = async function (args) {
                           await PaylikeLogger.log("Order placed successfully");
                           redirectOnSuccessAction.execute();
                         }
 
+                        /* Everything is now setup, we can try placing the order */
                         self.placeOrder();
                     }
 
