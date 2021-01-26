@@ -14,7 +14,7 @@
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Paylike</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_class>paylike-version version-1.3.1</frontend_class>
+                    <frontend_class>paylike-version version-1.3.2</frontend_class>
                 </field>
 
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -99,6 +99,16 @@
                 <field id="sort_order" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sort Order</label>
                     <frontend_class>validate-number</frontend_class>
+                </field>
+
+                <field id="enable_logs" sortOrder="161" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                  <label>Enable logs</label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="logs_actions" translate="label" type="button" sortOrder="162" showInDefault="1" showInWebsite="1" showInStore="1">
+                  <label>Logs actions</label>
+                  <frontend_model>Esparks\Paylike\Model\Adminhtml\Source\LogsActions</frontend_model>
                 </field>
 
             </group>
