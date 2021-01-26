@@ -33,6 +33,7 @@ Under the Magento Paylike payment method settings, you can:
  * Add test/live keys
  * Set payment mode (test/live)
  * Change the capture type (Instant/Manual by changing the order status)
+ * Enable/Disable Logs & Export existing logs
  
  ## How to
  
