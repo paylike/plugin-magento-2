@@ -101,6 +101,16 @@
                     <frontend_class>validate-number</frontend_class>
                 </field>
 
+                <field id="enable_logs" sortOrder="161" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                  <label>Enable logs</label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="logs_actions" translate="label" type="button" sortOrder="162" showInDefault="1" showInWebsite="1" showInStore="1">
+                  <label>Logs actions</label>
+                  <frontend_model>Esparks\Paylike\Model\Adminhtml\Source\LogsActions</frontend_model>
+                </field>
+
             </group>
         </section>
     </system>
