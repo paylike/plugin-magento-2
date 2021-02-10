@@ -5,7 +5,8 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 
-define("LOGS_DIR_NAME", BP . DIRECTORY_SEPARATOR . "var" . DIRECTORY_SEPARATOR . "log" . DIRECTORY_SEPARATOR . "paylike");
+define("LOG_DIR", BP . DIRECTORY_SEPARATOR . "var" . DIRECTORY_SEPARATOR . "log");
+define("LOGS_DIR_NAME", LOG_DIR . DIRECTORY_SEPARATOR . "paylike");
 define("LOGS_DATE_FORMAT", "Y-m-d-h-i-s");
 
 
@@ -32,8 +33,22 @@ class Log extends Action {
       exit();
     }
 
+    if (isset($post["writable"])) {
+      $this -> writable();
+      exit();
+    }
+
     $this -> log();
     exit();
+  }
+
+  private function writable() {
+    $response = [
+      "dir" => LOG_DIR,
+      "writable" => is_writable(LOG_DIR),
+    ];
+
+    echo json_encode($response);
   }
 
   private function deleteLogs() {
