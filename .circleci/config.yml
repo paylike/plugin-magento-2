@@ -21,7 +21,7 @@ jobs:
           background: true
       - run:
           name: Wait for Selenium
-          command: until $(echo | nc localhost 4444); do sleep 1
+          command: until $(echo | nc localhost 4444); do sleep 1; echo Waiting for selenium-server to start...; done;
       - run:
           name: Run quick tests
           command: ./vendor/bin/steward run staging $BROWSER --group="magento_quick_test" -vv
