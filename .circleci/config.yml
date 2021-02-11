@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:jessie-browsers
+      - image: circleci/php:7.1-node-browsers
         auth:
           username: ionutderikon
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
