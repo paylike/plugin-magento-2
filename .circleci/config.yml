@@ -4,15 +4,28 @@ jobs:
     docker:
       - image: circleci/node:jessie-browsers
         auth:
-          username: mydockerhub-user
+          username: ionutderikon
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - run: mkdir test-reports
       - run:
-          name: Download Selenium
-          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+          name: Install Composer
+          command: composer install --no-interaction
+      - run:
+          name: Install Selenium
+          command: ./vendor/bin/steward install 3.8.1 --no-interaction
       - run:
           name: Start Selenium
-          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+          command: java -jar selenium-server-standalone-3.8.1.jar -role hub -enablePassThrough false -log test-reports/selenium.log
           background: true
+      - run:
+          name: Wait for Selenium
+          command: until $(echo | nc localhost 4444); do sleep 1
+          background: true
+      - run:
+          name: Run quick tests
+          command: ./vendor/bin/steward run staging $BROWSER --group="magento_quick_test" -vv
+      - run:
+          name: Check test results
+          command: ./vendor/bin/steward results -vvv
