@@ -16,10 +16,10 @@ jobs:
           command: composer install --no-interaction
       - run:
           name: Install Selenium
-          command: ./vendor/bin/steward install 3.8.1 --no-interaction
+          command: ./vendor/bin/steward install 3.14.0 --no-interaction
       - run:
           name: Start Selenium
-          command: java -jar /home/circleci/project/vendor/bin/selenium-server-standalone-3.8.1.jar -role hub -enablePassThrough false -log test-reports/selenium.log
+          command: java -jar /home/circleci/project/vendor/bin/selenium-server-standalone-3.14.0.jar -role hub -enablePassThrough false -log test-reports/selenium.log
           background: true
       - run:
           name: Wait for Selenium
