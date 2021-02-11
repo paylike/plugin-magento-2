@@ -16,13 +16,15 @@ jobs:
           name: Install Selenium
           command: SELENIUM_PATH=$(./vendor/bin/steward install 3.8.1 --no-interaction)
       - run:
+          name: Echo Selenium path
+          command: echo "Selenium server path:" $SELENIUM_PATH
+      - run:
           name: Start Selenium
           command: java -jar $SELENIUM_PATH -role hub -enablePassThrough false -log test-reports/selenium.log
           background: true
       - run:
           name: Wait for Selenium
           command: until $(echo | nc localhost 4444); do sleep 1
-          background: true
       - run:
           name: Run quick tests
           command: ./vendor/bin/steward run staging $BROWSER --group="magento_quick_test" -vv
