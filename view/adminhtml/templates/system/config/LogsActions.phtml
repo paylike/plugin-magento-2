@@ -27,6 +27,25 @@
       a.click();
   }
 
+  const logsEnabledSelector = jQuery("#payment_other_paylikepaymentmethod_enable_logs");
+  jQuery.ajax({
+    url: "/paylike/index/Log",
+    type: 'POST',
+    dataType: 'text',
+    data: { "writable": 1 },
+    success: function (data) {
+      const response = JSON.parse(data);
+      if (response.writable) {
+        jQuery("#not-writable").remove();
+        logsEnabledSelector.attr("disabled", false);
+      } else {
+        logsEnabledSelector.val("0");
+        logsEnabledSelector.attr("disabled", true);
+        logsEnabledSelector.after('<p id="not-writable" class="note" style="color: red; margin-top: 8px;">Cannot enable logs right now<br />Please make sure the following directory is writable:<br /><pre><small>'+response.dir+'</small></pre></p>');
+      }
+    },
+  });
+
   function checkForLogs() {
     jQuery.ajax({
       url: "/paylike/index/Log",
