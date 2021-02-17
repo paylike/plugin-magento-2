@@ -19,12 +19,9 @@ jobs:
           command: ./vendor/bin/steward install 3.8.1 --no-interaction
       - run:
           name: Start Selenium
-          command: java -jar ./vendor/bin/selenium-server-standalone-3.8.1.jar -role hub -enablePassThrough false -log test-reports/selenium.log -host 127.0.0.1
-          Xvfb: 7055
+          command: java -jar ./vendor/bin/selenium-server-standalone-3.8.1.jar -log test-reports/selenium.log
           background: true
-      - run:
-          name: Wait for Selenium
-          command: until $(echo | nc localhost 4444); do sleep 1; echo Waiting for selenium-server to start...; done;
+      - run: sleep 10
       - run:
           name: Run quick tests
           command: ./vendor/bin/steward run staging $BROWSER --group="magento_quick_test" -vv
