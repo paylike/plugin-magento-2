@@ -1,4 +1,4 @@
-# Magento 2.* plugin for Paylike [![Build Status](https://travis-ci.org/paylike/plugin-magento-2.svg?branch=master)](https://travis-ci.org/paylike/plugin-magento-2)
+# Magento 2.* plugin for Paylike [![CircleCI](https://circleci.com/gh/paylike/plugin-magento-2.svg?style=shield)](https://circleci.com/gh/paylike/plugin-magento-2)
 
 This plugin is *not* developed or maintained by Paylike but kindly made
 available by a user.
