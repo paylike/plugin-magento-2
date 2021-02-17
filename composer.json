@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Magento\\": "tests/",
+      "Magento\\": "tests/",ve
       "Config\\": "config/"
     },
     "files": [
