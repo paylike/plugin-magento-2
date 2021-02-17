@@ -21,9 +21,6 @@ jobs:
           name: Download Chrome Driver
           command: mkdir chromedriver; wget -q -t 3 https://chromedriver.storage.googleapis.com/2.36/chromedriver_linux64.zip; unzip chromedriver_linux64 -d chromedriver; export CHROMEDRIVER_PATH=./chromedriver/chromedriver
       - run:
-          name: Extract Chrome Zip
-          command: jar xf chromedriver_linux64.zip
-      - run:
           name: Start Selenium
           command: java -jar ./vendor/bin/selenium-server-standalone-3.8.1.jar -log test-reports/selenium.log
           background: true
