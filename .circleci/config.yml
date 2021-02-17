@@ -18,6 +18,12 @@ jobs:
           name: Install Selenium
           command: ./vendor/bin/steward install 3.8.1 --no-interaction
       - run:
+          name: Download Chrome Driver
+          command: curl -O https://chromedriver.storage.googleapis.com/2.36/chromedriver_linux64.zip
+      - run:
+          name: Extract Chrome Zip
+          command: jar xf chromedriver_linux64.zip
+      - run:
           name: Start Selenium
           command: java -jar ./vendor/bin/selenium-server-standalone-3.8.1.jar -log test-reports/selenium.log
           background: true
