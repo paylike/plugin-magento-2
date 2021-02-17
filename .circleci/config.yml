@@ -22,7 +22,7 @@ jobs:
           command: mkdir chromedriver; wget -q -t 3 https://chromedriver.storage.googleapis.com/78.0.3904.105/chromedriver_linux64.zip; unzip chromedriver_linux64 -d chromedriver; export CHROMEDRIVER_PATH=./chromedriver/chromedriver
       - run:
           name: Start Selenium
-          command: java -jar ./vendor/bin/selenium-server-standalone-3.14.0.jar -log test-reports/selenium.log
+          command: java -jar ./vendor/bin/selenium-server-standalone-3.14.0.jar -enablePassThrough false -log test-reports/selenium.log
           background: true
       - run: sleep 10
       - run:
