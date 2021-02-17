@@ -28,6 +28,8 @@ jobs:
       - run:
           name: Run quick tests
           command: ./vendor/bin/steward run staging $BROWSER --group="magento_quick_test" -vv
+      - store_artifacts:
+          path: /home/circleci/project/logs
       - run:
           name: Run full tests
           command: ./vendor/bin/steward run staging $BROWSER --group="magento_full_test" -vv
