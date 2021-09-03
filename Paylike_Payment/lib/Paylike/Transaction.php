@@ -5,7 +5,6 @@ namespace Esparks\Paylike\lib\Paylike;
  * @package Paylike
  * Handles transaction operations.
  *
- * @version    1.0.0
  */
 if ( ! class_exists( 'Paylike\\Transaction' ) ) {
     class Transaction {
