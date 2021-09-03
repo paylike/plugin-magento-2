@@ -55,15 +55,15 @@ Once you have installed Magento, follow these simple steps:
   3. Create an app key for your Magento website;
   4. Purchase the extension from the Magento Marketplace;
   5. Login to your Magento 2.x Hosting site using SSH connection (for details contact your hosting provider);
-  10. Run the following commands from the Magento root directory (more info in the official documentation):
+  6. Run the following commands from the Magento root directory (more info in the official documentation):
       - `composer require esparks/module-paylike` (this will also install paylike/php-api ^1.0.8` package specified in composer.json file in this module)
       - `php bin/magento module:enable Esparks_Paylike --clear-static-content`
       - `php bin/magento setup:upgrade`
       - `php bin/magento setup:di:compile`
       - `php bin/magento cache:clean`
-  11. Open the Magento 2.x Admin panel;
-  12. The module should now be auto installed and visible under "Stores >> Configuration >> Sales >> Payment Methods", the module will be listed here inside the "OTHER PAYMENT METHODS" list;
-  13. Insert the app key and your public key in the Payment module settings for the Paylike plugin.
+  6. Open the Magento 2.x Admin panel;
+  7. The module should now be auto installed and visible under "Stores >> Configuration >> Sales >> Payment Methods", the module will be listed here inside the "OTHER PAYMENT METHODS" list;
+  8. Insert the app key and your public key in the Payment module settings for the Paylike plugin.
 
 ## Updating settings
 
