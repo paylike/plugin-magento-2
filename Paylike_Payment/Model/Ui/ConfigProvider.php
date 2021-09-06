@@ -198,7 +198,7 @@ class ConfigProvider implements ConfigProviderInterface {
 	 */
 
 	public function getConfigJSON() {
-		$test_mode  = $mode = $this->scopeConfig->getValue( 'payment/paylikepaymentmethod/transaction_mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE );
+		$test_mode  = $this->scopeConfig->getValue( 'payment/paylikepaymentmethod/transaction_mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE );
 		$quote    	= $this->_getQuote();
 		$title    	= $this->getPopupTitle();
 		$currency 	= $this->getStoreCurrentCurrency();
