@@ -21,13 +21,8 @@ class MagentoTestHelper {
 	public $client_pass;
 	public $currency = 'USD';
 	public $capture_mode = 'delayed';
-	public $checkout_mode = 'before_order';
-	public $manual_payment = false;
-	public $exclude_manual_payment = true;
 	public $admin_prefix = 'admin';
-	public $exclude_subscription = true;
-	public $settings_check = false;
-	public $stop_email = true;
+	public $stop_email = false;
 	public $log_version = false;
 	public $main_test;
 
