@@ -3,18 +3,13 @@
 
 namespace Magento;
 
-use Facebook\WebDriver\Exception\ElementNotVisibleException;
-use Facebook\WebDriver\Exception\NoAlertOpenException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\Exception\UnexpectedTagNameException;
 use Facebook\WebDriver\Exception\UnknownServerException;
-use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverDimension;
-use Facebook\WebDriver\WebDriverExpectedCondition;
-use Lmc\Steward\ConfigProvider;
 
 class MagentoRunner extends MagentoTestHelper
 {
