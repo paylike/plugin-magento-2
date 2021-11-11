@@ -28,5 +28,15 @@
                 <description>Secure payment with credit card via &#169; Paylike</description>
             </paylikepaymentmethod>
         </payment>
+        <csp>
+            <mode>
+                <storefront>
+                    <report_only>1</report_only>
+                </storefront>
+                <admin>
+                    <report_only>1</report_only>
+                </admin>
+            </mode>
+        </csp>
     </default>
 </config>
