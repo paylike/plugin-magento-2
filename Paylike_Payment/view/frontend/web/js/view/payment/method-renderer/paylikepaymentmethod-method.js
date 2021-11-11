@@ -114,7 +114,7 @@ define(
                         self.messageContainer.addErrorMessage = async function (messageObj) {
                           await PaylikeLogger.log("Place order failed. Reason: " + messageObj.message);
 
-                          self.messageContainer.oldAddErrorMessage(message);
+                          self.messageContainer.oldAddErrorMessage(messageObj);
                         }
 
                         /*
