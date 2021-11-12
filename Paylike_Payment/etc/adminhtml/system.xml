@@ -24,7 +24,7 @@
                 <field id="acceptedcards" translate="label" type="multiselect" sortOrder="5" showInDefault="1"
                        showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Payment method credit card logos</label>
-                    <backend_model>Esparks\Paylike\Model\Adminhtml\Source\AcceptedCards</backend_model>
+                    <source_model>Esparks\Paylike\Model\Adminhtml\Source\AcceptedCards</source_model>
                 </field>
 
                 <field id="description" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
