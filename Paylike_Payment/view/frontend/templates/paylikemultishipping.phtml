@@ -1,0 +1,86 @@
+<?php
+$checkoutConfig = $block->getCheckoutData()->getSerializedCheckoutConfigs();
+echo '<script type="text/javascript">window.checkoutConfig = ' . $checkoutConfig . '</script>';
+echo '<script type="text/javascript">window.paymentMethod = "' . $block->getSelectedMethodCode() . '"</script>';
+?>
+
+<script>
+
+if('paylikepaymentmethod' === window.paymentMethod) {
+
+  require(
+    [
+    'jquery',
+    'paylikemultishipping',
+    'Magento_Checkout/js/action/place-order',
+    'Magento_Checkout/js/action/redirect-on-success'
+    ], function(
+        $,
+        displayPopup,
+        placeOrder,
+        redirectOnSuccessAction,
+        ) {
+
+        $("#review-button").off("click").on("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          e.returnValue = false;
+
+          displayPopup(function (err, res) {
+            if (err) {
+                if(err === "closed") {
+                  PaylikeLogger.log("Paylike popup closed by user");
+                }
+
+                return console.warn(err);
+            }
+
+            if (res.transaction.id !== undefined && res.transaction.id !== "") {
+
+                $("#review-button").get(0).form.submit();
+
+                self.payliketransactionid = res.transaction.id;
+
+                PaylikeLogger.log("Paylike payment successful. Transaction ID: " + res.transaction.id);
+                /*
+                  In order to intercept the error of placeOrder request we need to monkey-patch
+                  the `addErrorMessage` function of the messageContainer:
+                  - first we duplicate the function on the same `messageContainer`, keeping the same `this`
+                  - next we override the function with a new one, were we log the error, and then we call the old function
+                */
+                self.messageContainer.oldAddErrorMessage = self.messageContainer.addErrorMessage;
+                self.messageContainer.addErrorMessage = async function (messageObj) {
+                  await PaylikeLogger.log("Place order failed. Reason: " + messageObj.message);
+
+                  self.messageContainer.oldAddErrorMessage(messageObj);
+                }
+
+                /*
+                  In order to log the placeOrder success, we need deactivate
+                  the redirect after order placed and call it manually, after
+                  we send the logs to the server
+                */
+
+                self.redirectAfterPlaceOrder = false;
+                self.afterPlaceOrder = async function (args) {
+                  await PaylikeLogger.log("Order placed successfully");
+                  redirectOnSuccessAction.execute();
+                }
+
+                /* Everything is now setup, we can try placing the order */
+                self.placeOrder();
+
+            } else {
+                PaylikeLogger.log("No transaction id returned from paylike, order not placed");
+
+                return false;
+            }
+        });
+
+        return  false;
+    });
+
+  });
+}
+
+</script>
