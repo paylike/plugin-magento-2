@@ -211,4 +211,12 @@
         </arguments>
     </type>
 
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool">
+        <arguments>
+            <argument name="services" xsi:type="array">
+                <item name="paylikepaymentmethod" xsi:type="string">Esparks\Paylike\Model\Multishipping\PlaceOrder</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
