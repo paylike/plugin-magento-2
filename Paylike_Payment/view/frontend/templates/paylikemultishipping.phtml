@@ -4,83 +4,299 @@ echo '<script type="text/javascript">window.checkoutConfig = ' . $checkoutConfig
 echo '<script type="text/javascript">window.paymentMethod = "' . $block->getSelectedMethodCode() . '"</script>';
 ?>
 
+
 <script>
+ if('paylikepaymentmethod' === window.paymentMethod) {
 
-if('paylikepaymentmethod' === window.paymentMethod) {
+    //////////////////////////// code that working only to display popup, but no redirect after payment /////////////////////////
+    // require(
+    //   [
+    //   'jquery',
+    //   'Magento_Checkout/js/action/place-order',
+    //   'Magento_Checkout/js/action/redirect-on-success'
+    //   ], function(
+    //     $,
+    //     paylikemultishipping,
+    //     placeOrder,
+    //     redirectOnSuccessAction,
+    //     ) {
 
-  require(
+    //       $("#review-button").off("click").on("click", (e) => {
+    //       e.preventDefault();
+    //       e.stopPropagation();
+    //       e.returnValue = false;
+
+    //           paylikemultishipping.call().displayPopup()
+
+    //       });
+    // });
+    //////////////////////////// code that working only to display popup, but no redirect after payment /////////////////////////
+
+
+    //////////////////// we can require here component that we do not need to add requirejs-config.js file //////////////////////
+
+///////////////////////// reference for code ////////////////////
+///////////////////////// /view/frontend/web/js/view/payment/method-renderer/paylikepaymentmethod-method.js ////////////////////
+
+    require(
     [
-    'jquery',
-    'paylikemultishipping',
-    'Magento_Checkout/js/action/place-order',
-    'Magento_Checkout/js/action/redirect-on-success'
-    ], function(
-        $,
-        displayPopup,
-        placeOrder,
-        redirectOnSuccessAction,
-        ) {
+        'ko',
+        'jquery',
+        'Magento_Checkout/js/view/payment/default',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/action/place-order',
+        'Magento_Checkout/js/model/customer-email-validator',
+        'Magento_Checkout/js/action/redirect-on-success',
+        'mage/url'
+    ],
+    function (
+              ko,
+              $,
+              Component,
+              quote,
+              placeOrderAction,
+              customerEmailValidator,
+              redirectOnSuccessAction,
+              url
+              ) {
 
-        $("#review-button").off("click").on("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          e.returnValue = false;
+        'use strict';
 
-          displayPopup(function (err, res) {
-            if (err) {
-                if(err === "closed") {
-                  PaylikeLogger.log("Paylike popup closed by user");
-                }
+        /////// jQuery changes made like this not working ///////////////////
+        ///////////////// need to remove and rebind the component on review-button ///////////////////
 
-                return console.warn(err);
-            }
+        // $("#review-button").off("click").on("click", (e) => {
+        //   e.preventDefault();
+        //   e.stopPropagation();
+        //   e.returnValue = false;
 
-            if (res.transaction.id !== undefined && res.transaction.id !== "") {
+          // $(document).ajaxComplete(function () {
+          //         $('#review-button').attr('data-bind',
+          //               `
+          //               click: displayPopup,
+          //               attr: {title: $t('Place Order')},
+          //               css: {disabled: !isPlaceOrderActionAllowed()},
+          //               enable: (getCode() == isChecked())
+          //               `
+          //       );
+          //   });
 
-                $("#review-button").get(0).form.submit();
 
-                self.payliketransactionid = res.transaction.id;
+        return Component.extend({
+            defaults: {
+                redirectAfterPlaceOrder: false,
+                payliketransactionid: ''
+            },
 
-                PaylikeLogger.log("Paylike payment successful. Transaction ID: " + res.transaction.id);
-                /*
-                  In order to intercept the error of placeOrder request we need to monkey-patch
-                  the `addErrorMessage` function of the messageContainer:
-                  - first we duplicate the function on the same `messageContainer`, keeping the same `this`
-                  - next we override the function with a new one, were we log the error, and then we call the old function
-                */
-                self.messageContainer.oldAddErrorMessage = self.messageContainer.addErrorMessage;
-                self.messageContainer.addErrorMessage = async function (messageObj) {
-                  await PaylikeLogger.log("Place order failed. Reason: " + messageObj.message);
+            /** Initialize this component. */
+            initialize: function () {
+                var self = this;
+                this._super()
+                    .initObservable();
+            },
 
-                  self.messageContainer.oldAddErrorMessage(messageObj);
-                }
+            /**
+             * Set list of observable attributes
+             * @returns {exports.initObservable}
+             */
+            initObservable: function () {
 
-                /*
-                  In order to log the placeOrder success, we need deactivate
-                  the redirect after order placed and call it manually, after
-                  we send the logs to the server
-                */
+              ///////////// an idea...not finished /////////////
+                // var selectedButtonId = '#review-button';
 
-                self.redirectAfterPlaceOrder = false;
-                self.afterPlaceOrder = async function (args) {
-                  await PaylikeLogger.log("Order placed successfully");
-                  redirectOnSuccessAction.execute();
-                }
+                // this._super()
+                //     .observe(['click']);
 
-                /* Everything is now setup, we can try placing the order */
-                self.placeOrder();
+                // $(selectedButtonId).attr('click', this.bind(this.displayPopup));
 
-            } else {
-                PaylikeLogger.log("No transaction id returned from paylike, order not placed");
+                // return this;
+              },
 
-                return false;
-            }
+              /** Returns send check to info */
+              getMailingAddress: function () {
+                  return window.checkoutConfig.payment.checkmo.mailingAddress;
+              },
+
+              getDescription: function () {
+                  return window.checkoutConfig.description;
+              },
+
+              getCardLogos: function () {
+                  var logosString = window.checkoutConfig.cards;
+
+                  if (!logosString) {
+                      return '';
+                  }
+
+                  var logos = logosString.split(',');
+                  var imghtml = "";
+                  if (logos.length > 0) {
+                      for (var i = 0; i < logos.length; i++) {
+                          imghtml = imghtml + "<img src='" + window.checkoutConfig.url[i] + "' alt='" + logos[i] + "' width='45'>";
+                      }
+                  }
+
+                  return imghtml;
+              },
+
+              displayPopup: function () {
+
+
+                /////////////// commented code bellow is not necessary as I saw in development process //////////////
+
+                  // var self = this;
+
+                  /** Initialize Paylike object. */
+                  var paylike = Paylike({key: window.checkoutConfig.publicapikey});
+
+                  var paylikeConfig = window.checkoutConfig.config;
+                  // var multiplier = window.checkoutConfig.multiplier;
+                  // var grandTotal = parseFloat(quote.totals()['grand_total']);
+                  // var taxAmount = parseFloat(quote.totals()['tax_amount']);
+                  // var totalAmount = grandTotal + taxAmount;
+
+                  /** Save amount value in minor unit. */
+                  // paylikeConfig.amount.value = Math.round(totalAmount * multiplier);
+
+                  /** Save amount value on window data. */
+                  // window.paylikeminoramount = paylikeConfig.amount.value;
+
+                  /** Change test key value from string 'test' with a boolean value. */
+                  paylikeConfig.test = ('test' == paylikeConfig.test) ? (true) : (false);
+
+
+                  // if (quote.guestEmail) {
+                  //     paylikeConfig.custom.customer.name = quote.billingAddress()['firstname'] + " " + quote.billingAddress()['lastname'];
+                  //     paylikeConfig.custom.customer.email = quote.guestEmail;
+                  // }
+
+
+
+                  //////////////////// quote is null, then we cannot extract billing address ///////////////
+                  ////////////// as I saw, we need only address, that other details are available //////////
+
+                  /** Get customer data from checkout config. */
+                  // var paylikeCustomerData = window.checkoutConfig.customerData;
+
+                  /** Extract billing address by index. */
+                  // var billingAddressIndex = paylikeCustomerData.default_billing;
+                  // var billingAddress = paylikeCustomerData.addresses[billingAddressIndex];
+
+                  /** Prepare customer data */
+                  // paylikeConfig.custom.customer.address = billingAddress.street[0] + ", " +
+                  //                                         billingAddress.city + ", " +
+                  //                                         billingAddress.region + " " +
+                  //                                         billingAddress.postcode + ", " +
+                  //                                         billingAddress.country_id;
+
+
+                  PaylikeLogger.setContext(paylikeConfig, $, url);
+
+                  PaylikeLogger.log("Opening paylike popup");
+
+                  /** Call pay() function from js file Paylike loaded SDK. */
+                  paylike.pay(paylikeConfig, function (err, res) {
+
+                      if (err) {
+                          if(err === "closed") {
+                            PaylikeLogger.log("Paylike popup closed by user");
+                          }
+
+                          return console.warn(err);
+                      }
+
+                      if (res.transaction.id !== undefined && res.transaction.id !== "") {
+                          self.payliketransactionid = res.transaction.id;
+                          PaylikeLogger.log("Paylike payment successfull. Transaction ID: " + res.transaction.id);
+
+                          /*
+                            In order to intercept the error of placeOrder request we need to monkey-patch
+                            the `addErrorMessage` function of the messageContainer:
+                            - first we duplicate the function on the same `messageContainer`, keeping the same `this`
+                            - next we override the function with a new one, were we log the error, and then we call the old function
+                          */
+
+                          //////////////////////////// TEMPORARY DISABLED //////////////////////////////////
+                          /////////////////// messageObj need to be verified - it contents /////////////////////
+                          // self.messageContainer.oldAddErrorMessage = self.messageContainer.addErrorMessage;
+                          // self.messageContainer.addErrorMessage = async function (messageObj) {
+                          //   await PaylikeLogger.log("Place order failed. Reason: " + messageObj);
+
+                          //   self.messageContainer.oldAddErrorMessage(messageObj);
+                          // }
+
+                          /*
+                            In order to log the placeOrder success, we need deactivate
+                            the redirect after order placed and call it manually, after
+                            we send the logs to the server
+                          */
+                          // self.redirectAfterPlaceOrder = false;  //////////////////////////////>>>>>> moved in defaults
+                          self.afterPlaceOrder = async function (args) {
+                            await PaylikeLogger.log("Order placed successfully");
+                              redirectOnSuccessAction.execute();
+                          }
+
+                          /* Everything is now setup, we can try placing the order */
+                          self.placeOrder();
+                      }
+
+                      else {
+                          PaylikeLogger.log("No transaction id returned from paylike, order not placed");
+
+                          return false;
+                      }
+                  });
+              },
+
+              getCode: function () {
+                  return window.paymentMethod;
+              },
+
+              getData: function () {
+                  return {
+                      "method": window.paymentMethod,
+                      'additional_data': {
+                          'payliketransactionid': this.payliketransactionid
+                      }
+                  };
+              },
+
+
         });
 
-        return  false;
-    });
+      // }); //////// end jQuery off/on events bind to review-button
 
-  });
-}
+    }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
