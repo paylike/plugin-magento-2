@@ -63,22 +63,22 @@ echo '<script type="text/javascript">window.paymentMethod = "' . $block->getSele
                                 $("#review-button").get(0).form.submit();
                             }
                         ).fail(
-                            PaylikeLogger.log("Place order failed. Reason: " + messagesContainer.message)
+                            PaylikeLogger.log("Place order failed.")
                         ).always(
                             function () {
                                 fullScreenLoader.stopLoader();
                             }
                         );
 
-                } else {
-                    PaylikeLogger.log("No transaction id returned from paylike, order not placed");
-                    return false;
-                }
-            });
+                    } else {
+                        PaylikeLogger.log("No transaction id returned from paylike, order not placed");
+                        return false;
+                    }
+                });
 
-        return  false;
+            return  false;
 
-      });
+        });
     });
 
  }
