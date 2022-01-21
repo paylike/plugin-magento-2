@@ -97,8 +97,12 @@ define(
                         if(err === "closed") {
                           PaylikeLogger.log("Paylike popup closed by user");
                         }
-
-                        return console.warn(err);
+                        /**
+                         * (Need improvement/rethink the logic)
+                         * If user closes the popup, we need to refresh the page.
+                         * If not reload, the popup will show up in live mode.
+                         */
+                        return location.reload();
                     }
 
                     if (res.transaction.id !== undefined && res.transaction.id !== "") {
@@ -114,7 +118,7 @@ define(
                         self.messageContainer.addErrorMessage = async function (messageObj) {
                           await PaylikeLogger.log("Place order failed. Reason: " + messageObj.message);
 
-                          self.messageContainer.oldAddErrorMessage(message);
+                          self.messageContainer.oldAddErrorMessage(messageObj);
                         }
 
                         /*
@@ -146,7 +150,7 @@ define(
 
             getData: function () {
                 return {
-                    "method": this.item.method,
+                    "method": this.getCode(),
                     'additional_data': {
                         'payliketransactionid': this.payliketransactionid
                     }
