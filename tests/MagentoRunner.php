@@ -3,18 +3,13 @@
 
 namespace Magento;
 
-use Facebook\WebDriver\Exception\ElementNotVisibleException;
-use Facebook\WebDriver\Exception\NoAlertOpenException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\Exception\UnexpectedTagNameException;
 use Facebook\WebDriver\Exception\UnknownServerException;
-use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverDimension;
-use Facebook\WebDriver\WebDriverExpectedCondition;
-use Lmc\Steward\ConfigProvider;
 
 class MagentoRunner extends MagentoTestHelper
 {
@@ -95,6 +90,7 @@ class MagentoRunner extends MagentoTestHelper
 
     public function disableEmailSection() {
         $this->click('#system_smtp-head');
+		$this->waitForElement('#system_smtp_disable_inherit');
         $this->uncheck('#system_smtp_disable_inherit');
         $this->waitForElement('#system_smtp_disable');
         $this->selectValue('#system_smtp_disable', 1);
@@ -154,10 +150,10 @@ class MagentoRunner extends MagentoTestHelper
 
         $this->goToPage('sales/order/', '.admin__data-grid-wrap a.action-menu-item', true);
 
-        $this->waitForElement('.admin__data-grid-wrap a.action-menu-item');
+        $this->waitForElement('.admin__data-grid-wrap tbody tr:first-child .data-grid-actions-cell .action-menu-item');
         $this->waitElementDisappear('.admin__data-grid-loading-mask');
         try {
-            $this->click('.admin__data-grid-wrap a.action-menu-item');
+            $this->click('.admin__data-grid-wrap tbody tr:last-child .data-grid-actions-cell .action-menu-item');
         } catch (UnknownServerException $exception) {
             $this->selectOrder();
         }
@@ -246,8 +242,11 @@ class MagentoRunner extends MagentoTestHelper
 
             return true;
         }
-        $this->click('.payment-method #paylikepaymentmethod');
+
+		$this->click( '.payment-method #paylikepaymentmethod' );
         $this->waitForElement('.payment-method._active .payment-method-content .actions-toolbar .primary button.action.primary.checkout');
+
+		$this->waitElementDisappear('.loading-mask');
         $this->click('.payment-method._active .payment-method-content .actions-toolbar .primary button.action.primary.checkout');
 
     }
@@ -278,14 +277,20 @@ class MagentoRunner extends MagentoTestHelper
      */
     public function addToCart() {
 
-        $this->click("#product-addtocart-button");
+
         try {
+			$this->click("#product-addtocart-button");
             $this->waitForElement(".message-success", 5);
         } catch (NoSuchElementException $exception) {
             $this->wd->navigate()->refresh();
             $this->waitForElement("#product-addtocart-button");
             $this->addToCart();
         }
+		catch (UnknownServerException $exception) {
+			$this->wd->navigate()->refresh();
+			$this->waitForElement("#product-addtocart-button");
+			$this->addToCart();
+		}
 
 
     }
@@ -337,10 +342,10 @@ class MagentoRunner extends MagentoTestHelper
         $this->waitForElement('.admin__data-grid-wrap a.action-menu-item');
         $this->waitElementDisappear('.admin__data-grid-loading-mask');
         $this->click('.admin__data-grid-wrap a.action-menu-item');
-        $this->waitForElement('#capture');
+        $this->waitForElement('#credit-memo');
         //$refund       = preg_match_all( '!\d+!', $this->getText( '.order-subtotal-table tfoot strong span.price' ), $refund_value );
         //$refund_value = $refund_value[0];
-        $this->click('#capture');
+        $this->click('#credit-memo');
         $this->waitForElement('.actions .submit-button.refund');
         $this->click('.actions .submit-button.refund');
 
