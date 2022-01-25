@@ -10,7 +10,7 @@ Released under the GPL V3 license: https://opensource.org/licenses/GPL-3.0
 
 [![Last succesfull test](https://log.derikon.ro/api/v1/log/read?tag=magento2&view=svg&label=Magento&key=ecommerce&background=F26322)](https://log.derikon.ro/api/v1/log/read?tag=magento2&view=html)
 
-Magento version last tested on: 2.4.3
+Magento version last tested on: 2.4.3-p1
 
 *The plugin has been tested with most versions of Magento at every iteration. We recommend using the latest version of Magento, but if that is not possible for some reason, test the plugin with your Magento version and it would probably function properly.*
 

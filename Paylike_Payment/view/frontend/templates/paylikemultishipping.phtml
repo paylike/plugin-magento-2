@@ -1,0 +1,85 @@
+<?php
+/** Get checkout data to be available for precessing in frontend. */
+$checkoutConfig = $block->getCheckoutData()->getSerializedCheckoutConfigs();
+/** Save checkout data in frontend variables. */
+echo '<script type="text/javascript">window.checkoutConfig = ' . $checkoutConfig . '</script>';
+echo '<script type="text/javascript">window.paymentMethod = "' . $block->getSelectedMethodCode() . '"</script>';
+?>
+
+<script>
+/** Check if chosen payment method is Paylike. */
+ if('paylikepaymentmethod' === window.paymentMethod) {
+
+    require([
+        'jquery',
+        'Esparks_Paylike/js/paylikemultishipping',
+        'Magento_Checkout/js/action/set-payment-information',
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Ui/js/model/messages'
+    ],function(
+        $,
+        paylikeMultiShipping,
+        setPaymentInformationAction,
+        fullScreenLoader,
+        messagesContainer,
+        ) {
+            $("#review-button").off("click").on("click", (e) => {
+
+                e.preventDefault();
+
+                paylikeMultiShipping(function (err, res) {
+                    if (err) {
+                        if(err === "closed") {
+                            PaylikeLogger.log("Paylike popup closed by user");
+                        }
+                        /**
+                         * (Need improvement/rethink the logic)
+                         * If user closes the popup, we need to refresh the page.
+                         * If not reload, the popup will show up in live mode.
+                         */
+                        return location.reload();
+                    }
+
+                    if (res.transaction.id !== undefined && res.transaction.id !== "") {
+
+                        this.payliketransactionid = res.transaction.id;
+
+                        PaylikeLogger.log("Paylike payment successfull. Transaction ID: " + res.transaction.id);
+
+                        /** Add extra data to be used on quote. */
+                        extraData = {
+                            "method": window.paymentMethod,
+                            "additional_data": {
+                                'payliketransactionid': this.payliketransactionid
+                            }
+                        };
+                        $.when(
+                            setPaymentInformationAction(messagesContainer, extraData)
+                        ).done(
+                            function () {
+                                fullScreenLoader.stopLoader();
+                                PaylikeLogger.log("Order placed successfully");
+                                /** Submit the multishipping overview form. */
+                                $("#review-button").get(0).form.submit();
+                            }
+                        ).fail(
+                            PaylikeLogger.log("Place order failed.")
+                        ).always(
+                            function () {
+                                fullScreenLoader.stopLoader();
+                            }
+                        );
+
+                    } else {
+                        PaylikeLogger.log("No transaction id returned from paylike, order not placed");
+                        return false;
+                    }
+                });
+
+            return  false;
+
+        });
+    });
+
+ }
+</script>
