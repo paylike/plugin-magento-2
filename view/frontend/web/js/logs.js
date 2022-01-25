@@ -32,6 +32,6 @@ window.PaylikeLogger = {
       });
     },
     enabled: function () {
-      return window.checkoutConfig.config.logsEnabled;
+      return window.checkoutConfig.config.custom.logsEnabled;
     }
   }

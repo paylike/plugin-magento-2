@@ -14,7 +14,7 @@ use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
  */
 class ConfigProvider implements ConfigProviderInterface {
 	const CODE = 'paylikepaymentmethod';
-	const MAGENTO_PAYLIKE_VERSION = '1.3.3';
+	const MAGENTO_PAYLIKE_VERSION = '1.4.1';
 	protected $scopeConfig;
 	protected $_cart;
 	protected $_assetRepo;
@@ -186,6 +186,11 @@ class ConfigProvider implements ConfigProviderInterface {
 
 	}
 
+	public function getPaylikeExponent( $currency ) {
+		return $this->helper->getPaylikeCurrency( $currency )['exponent'];
+
+	}
+
 	/**
 	 * Retrieve config values for popup of Paylike
 	 *
@@ -193,12 +198,15 @@ class ConfigProvider implements ConfigProviderInterface {
 	 */
 
 	public function getConfigJSON() {
-		$quote    = $this->_getQuote();
-		$title    = $this->getPopupTitle();
-		$currency = $this->getStoreCurrentCurrency();
+		$test_mode  = $this->scopeConfig->getValue( 'payment/paylikepaymentmethod/transaction_mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE );
+		$quote    	= $this->_getQuote();
+		$title    	= $this->getPopupTitle();
+		$currency 	= $this->getStoreCurrentCurrency();
 		$total      = $quote->getGrandTotal();
 
 		$amount = $this->getPaylikeAmount($currency,$total);
+
+		$exponent = $this->getPaylikeExponent($currency);
 
 		$email    = $quote->getBillingAddress()->getEmail();
 		$products = array();
@@ -212,7 +220,7 @@ class ConfigProvider implements ConfigProviderInterface {
 			$products[] = $product;
 		}
 
-		$quoteId 			= $quote->getId();
+		$quoteId 	  = $quote->getId();
 		$quote        = $this->cartRepositoryInterface->get( $quote->getId() );
 		$customerData = $quote->getCustomer();
 		$address      = $quote->getBillingAddress();
@@ -242,17 +250,21 @@ class ConfigProvider implements ConfigProviderInterface {
 		$version = SELF::MAGENTO_PAYLIKE_VERSION;
 
 		return [
+			'test'    		=> $test_mode,
 			'title'    		=> $title,
-			'currency' 		=> $currency,
-			'amount'   		=> $amount,
+			'amount'   		=> [
+				'currency' => $currency,
+				'exponent' => $exponent,
+				'value'    => $amount,
+			],
 			'locale'   		=> $this->locale->getLocale(),
-			'logsEnabled' => $logsEnabled,
-			'quoteId' 		=> $quoteId,
 			'custom'   		=> [
-				'products'  => $products,
-				'customer'  => $customer,
-				'platform'  => $platform,
-				'paylikePluginVersion'   => $version
+				'quoteId' 				=> $quoteId,
+				'products'  			=> $products,
+				'customer'  			=> $customer,
+				'platform'  			=> $platform,
+				'paylikePluginVersion'  => $version,
+				'logsEnabled'   		=> $logsEnabled,
 			]
 		];
 	}

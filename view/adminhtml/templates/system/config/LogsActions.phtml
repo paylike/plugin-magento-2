@@ -27,8 +27,8 @@
       a.click();
   }
 
-  const logsEnabledSelector = jQuery("#payment_other_paylikepaymentmethod_enable_logs");
-  jQuery.ajax({
+  const logsEnabledSelector = $("#payment_other_paylikepaymentmethod_enable_logs");
+  $.ajax({
     url: "/paylike/index/Log",
     type: 'POST',
     dataType: 'text',
