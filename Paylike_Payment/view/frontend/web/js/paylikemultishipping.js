@@ -55,7 +55,11 @@ define(
             }
 
             paylikeConfig.custom.customer.phoneNo = billingAddress.telephone;
-            paylikeConfig.custom.customer.address = billingAddress.inline;
+            paylikeConfig.custom.customer.address = billingAddress.street[0] + ", " +
+                                                    billingAddress.city + ", " +
+                                                    billingAddress.region.region + " " +
+                                                    billingAddress.postcode + ", " +
+                                                    billingAddress.country_id;
 
             PaylikeLogger.setContext(paylikeConfig, $, url);
 
