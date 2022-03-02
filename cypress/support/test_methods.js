@@ -207,8 +207,8 @@ export var TestMethods = {
         cy.get('#switcher-currency-trigger').then($actualCurrency => {
             /** Check if currency is not already selected, then select it. */
             if (!$actualCurrency.text().includes(currency)) {
-                $actualCurrency.trigger('click');
-                cy.get(`#switcher-currency-trigger .currency-${currency}`).click();
+                cy.removeDisplayNoneFrom('#switcher-currency ul');
+                cy.get(`#switcher-currency li.currency-${currency}`).click();
             }
         });
     },
