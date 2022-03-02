@@ -82,18 +82,15 @@ export var TestMethods = {
          */
         var randomInt = PaylikeTestHelper.getRandomInt(/*max*/ 1);
         if (0 === randomInt) {
-            cy.goToPage(this.StoreUrl + '/fusion-backpack.html');
+            cy.goToPage(this.StoreUrl + '/fusion-backpack.html', {timeout: 20000});
         } else {
-            cy.goToPage(this.StoreUrl + '/impulse-duffle.html');
+            cy.goToPage(this.StoreUrl + '/impulse-duffle.html', {timeout: 20000});
         }
-
-        /** Wait the product to add to cart. */
-        cy.wait(500);
 
         this.changeShopCurrency(currency);
 
         /** Wait the price to refresh. */
-        cy.wait(500);
+        cy.wait(1000);
 
         cy.get('#product-addtocart-button').click();
 
@@ -101,18 +98,19 @@ export var TestMethods = {
         cy.wait(1000);
 
         /** Go to shipping step. */
-        cy.goToPage(this.StoreUrl + '/checkout/#shipping');
+        cy.goToPage(this.StoreUrl + '/checkout', {timeout: 20000});
 
         /** Wait for page to load. */
-        cy.wait(10000);
+        // cy.wait(15000);
 
+        /** Go next. */
         cy.get('.button > span').click()
 
         /** Choose Paylike. */
         cy.get(`input[value*=${this.PaylikeName}]`).click();
 
         /** Wait the price to refresh. */
-        cy.wait(4000);
+        cy.wait(15000);
 
         /** Check amount. */
         cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
@@ -142,22 +140,21 @@ export var TestMethods = {
      */
     processOrderFromAdmin(paylikeAction, partialAmount = false) {
         /** Go to admin orders page. */
-        cy.goToPage(this.OrdersPageAdminUrl);
+        cy.goToPage(this.OrdersPageAdminUrl, {timeout: 20000});
 
         /** Wait to load orders. */
         cy.get('div[data-ui-id="page-actions-toolbar-content-header"]').should('not.be.visible');
-        cy.wait(4000);
+        cy.wait(15000);
 
-        /** Set position relative on toolbar */
+        /** Set position relative on toolbars. */
         PaylikeTestHelper.setPositionRelativeOn('header.page-header.row');
+        PaylikeTestHelper.setPositionRelativeOn('tr[data-bind="foreach: {data: getVisible(), as: \'$col\'}"]');
+        PaylikeTestHelper.setPositionRelativeOn('.admin__data-grid-header');
+        PaylikeTestHelper.setPositionRelativeOn('.page-main-actions');
+        PaylikeTestHelper.setPositionRelativeOn('div[data-ui-id="page-actions-toolbar-content-header"]');
 
         /** Click on first (latest in time) order from orders table. */
-        cy.get('a[href*="/view/order_id/"]', {timeout:8000}).first().click();
-
-        /** Set position relative on toolbar */
-        PaylikeTestHelper.setPositionRelativeOn('div[data-ui-id="page-actions-toolbar-content-header"]');
-        PaylikeTestHelper.setPositionRelativeOn('div[class="admin__data-grid-header"]');
-        PaylikeTestHelper.setPositionRelativeOn('tr[data-bind="foreach: {data: getVisible(), as: \'$col\'}"]');
+        cy.get('tr.data-row', {timeout: 10000}).first().click();
 
         /**
          * Take specific action on order
@@ -211,7 +208,7 @@ export var TestMethods = {
             /** Check if currency is not already selected, then select it. */
             if (!$actualCurrency.text().includes(currency)) {
                 $actualCurrency.trigger('click');
-                cy.get(`li[class=currency-${currency}]`).click();
+                cy.get(`#switcher-currency-trigger .currency-${currency}`).click();
             }
         });
     },
