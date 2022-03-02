@@ -89,28 +89,25 @@ export var TestMethods = {
 
         this.changeShopCurrency(currency);
 
-        /** Wait the price to refresh. */
-        cy.wait(1000);
-
-        cy.get('#product-addtocart-button').click();
-
-        /** Wait the product to add to cart. */
-        cy.wait(1000);
+        cy.get('#product-addtocart-button', {timeout: 4000}).click();
 
         /** Go to shipping step. */
         cy.goToPage(this.StoreUrl + '/checkout', {timeout: 20000});
 
         /** Wait for page to load. */
-        // cy.wait(15000);
+        cy.wait(15000);
 
         /** Go next. */
-        cy.get('.button > span').click()
+        cy.get('.button > span').click();
+
+        /** Wait for page to load. */
+        cy.wait(5000);
 
         /** Choose Paylike. */
         cy.get(`input[value*=${this.PaylikeName}]`).click();
 
         /** Wait the price to refresh. */
-        cy.wait(15000);
+        cy.wait(10000);
 
         /** Check amount. */
         cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
@@ -143,7 +140,7 @@ export var TestMethods = {
         cy.goToPage(this.OrdersPageAdminUrl, {timeout: 20000});
 
         /** Wait to load orders. */
-        cy.get('div[data-ui-id="page-actions-toolbar-content-header"]').should('not.be.visible');
+        cy.get('div[class*="loading-mask"]').should('not.be.visible');
         cy.wait(15000);
 
         /** Set position relative on toolbars. */
@@ -207,8 +204,10 @@ export var TestMethods = {
         cy.get('#switcher-currency-trigger').then($actualCurrency => {
             /** Check if currency is not already selected, then select it. */
             if (!$actualCurrency.text().includes(currency)) {
-                cy.removeDisplayNoneFrom('#switcher-currency ul');
+                Cypress.$('#switcher-currency ul').attr('style', 'display: block;');
                 cy.get(`#switcher-currency li.currency-${currency}`).click();
+                /** Wait the price to refresh. */
+                cy.wait(2000);
             }
         });
     },
