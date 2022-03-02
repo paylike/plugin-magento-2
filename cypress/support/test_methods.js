@@ -12,30 +12,23 @@ export var TestMethods = {
     RemoteVersionLogUrl: Cypress.env('REMOTE_LOG_URL'),
 
     /** Construct some variables to be used bellow. */
-    ShopName: 'opencart3',
+    ShopName: 'magento2',
     PaylikeName: 'paylike',
-    UserTokenFromUrl: '',
-    PaymentMethodsAdminUrl: '/index.php?route=extension/payment/paylike',
-    OrdersPageAdminUrl: '/index.php?route=sale/order',
+    PaymentMethodsAdminUrl: '/admin/system_config/edit/section/payment/',
+    OrdersPageAdminUrl: '/sales/order/',
 
     /**
      * Login to admin backend account
      */
     loginIntoAdminBackend() {
-        cy.loginIntoAccount('input[name=username]', 'input[name=password]', 'admin');
-        /**
-         * Get the token from the URL
-         * to use when accessing administrator URLs.
-         */
-         cy.url().then($url => {
-            TestMethods.UserTokenFromUrl = $url.split('user_token=')[1];
-        })
+        cy.loginIntoAccount('input[name="login[username]"]', 'input[name="login[password]"]', 'admin');
+        // cy.wait(5000);
     },
     /**
      * Login to client|user frontend account
      */
     loginIntoClientAccount() {
-        cy.loginIntoAccount('input[name=email]', 'input[name=password]', 'client');
+        cy.loginIntoAccount('input[name="login[username]"]', 'input[name="login[password]"]', 'client');
     },
 
     /**
@@ -44,13 +37,20 @@ export var TestMethods = {
      */
     changePaylikeCaptureMode(captureMode) {
         /** Go to Paylike payment method. */
-        this.goToAdminPage(this.PaymentMethodsAdminUrl);
+        cy.goToPage(this.PaymentMethodsAdminUrl);
+
+        /** Check if Paylike section is not visible then click. */
+        cy.get('#row_payment_us_paylikepaymentmethod a').then(($paymentMethodRow) => {
+            if(!$paymentMethodRow.hasClass('open')) {
+                $paymentMethodRow.trigger('click');
+            }
+        });
 
         /** Select capture mode. */
-        cy.selectOptionContaining('#input_capture_mode', captureMode)
+        cy.selectOptionContaining('#payment_us_paylikepaymentmethod_capture_mode', captureMode)
 
         /** Save. */
-        cy.get('button[form=form-paylike]').click();
+        cy.get('button[id=save]').click();
     },
 
     /**
@@ -77,63 +77,53 @@ export var TestMethods = {
      * @param {String} currency
      */
     makePaymentFromFrontend(currency) {
-        /** Go to store frontend. */
-        cy.goToPage(this.StoreUrl);
-
-        /** Change currency. */
-        this.changeShopCurrency(currency);
-
-        cy.wait(500);
-
         /**
          * Select specific product.
          */
         var randomInt = PaylikeTestHelper.getRandomInt(/*max*/ 1);
         if (0 === randomInt) {
-            cy.goToPage(this.StoreUrl + '/index.php?route=product/product&product_id=40');
+            cy.goToPage(this.StoreUrl + '/fusion-backpack.html');
         } else {
-            cy.goToPage(this.StoreUrl + '/index.php?route=product/product&product_id=43');
+            cy.goToPage(this.StoreUrl + '/impulse-duffle.html');
         }
 
-        cy.get('#button-cart').click();
+        /** Wait the product to add to cart. */
+        cy.wait(500);
+
+        this.changeShopCurrency(currency);
+
+        /** Wait the price to refresh. */
+        cy.wait(500);
+
+        cy.get('#product-addtocart-button').click();
 
         /** Wait the product to add to cart. */
         cy.wait(1000);
 
-        /** Go to checkout. */
-        cy.goToPage(this.StoreUrl + '/index.php?route=checkout/checkout');
+        /** Go to shipping step. */
+        cy.goToPage(this.StoreUrl + '/checkout/#shipping');
 
-        /** Continue. */
-        cy.wait(1000);
-        cy.get('#button-payment-address').click();
-        cy.wait(500);
-        cy.get('#button-shipping-address').click();
-        cy.wait(500);
-        cy.get('#button-shipping-method').click();
-        cy.wait(500);
+        /** Wait for page to load. */
+        cy.wait(10000);
+
+        cy.get('.button > span').click()
 
         /** Choose Paylike. */
-        cy.get(`input[value=${this.PaylikeName}]`).click();
+        cy.get(`input[value*=${this.PaylikeName}]`).click();
 
-        /** Agree Terms & Conditions. */
-        cy.get('input[name=agree]').click();
-
-        /** Continue. */
-        cy.get('#button-payment-method').click();
-
-        /** Wait to load Paylike SDK. */
-        cy.wait(2000);
+        /** Wait the price to refresh. */
+        cy.wait(4000);
 
         /** Check amount. */
-        cy.get('tfoot> tr:nth-child(3) > td:nth-child(2)').then($grandTotal => {
+        cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
             var expectedAmount = PaylikeTestHelper.filterAndGetAmountInMinor($grandTotal, currency);
-            cy.get('#paylike-payment-widget').invoke('attr', 'data-amount').then(amount => {
-                expect(expectedAmount).to.eq(Number(amount));
+            cy.window().then($win => {
+                expect(expectedAmount).to.eq(Number($win.checkoutConfig.config.amount.value));
             });
         });
 
         /** Show paylike popup. */
-        cy.get('#button-confirm').click();
+        cy.get(':nth-child(5) > div.primary > .action').click();
 
         /**
          * Fill in Paylike popup.
@@ -142,7 +132,7 @@ export var TestMethods = {
 
         cy.wait(2000);
 
-        cy.get('h1').should('contain', 'Your order has been placed!');
+        cy.get('h1 > span.base').should('contain', 'Thank you for your purchase!');
     },
 
     /**
@@ -151,14 +141,23 @@ export var TestMethods = {
      * @param {Boolean} partialAmount
      */
     processOrderFromAdmin(paylikeAction, partialAmount = false) {
-        /** Go to admin & get order statuses to be globally used. */
-        this.getPaylikeOrderStatuses();
-
         /** Go to admin orders page. */
-        this.goToAdminPage(this.OrdersPageAdminUrl);
+        cy.goToPage(this.OrdersPageAdminUrl);
+
+        /** Wait to load orders. */
+        cy.get('div[data-ui-id="page-actions-toolbar-content-header"]').should('not.be.visible');
+        cy.wait(4000);
+
+        /** Set position relative on toolbar */
+        PaylikeTestHelper.setPositionRelativeOn('header.page-header.row');
 
         /** Click on first (latest in time) order from orders table. */
-        cy.get('i.fa.fa-eye').first().click();
+        cy.get('a[href*="/view/order_id/"]', {timeout:8000}).first().click();
+
+        /** Set position relative on toolbar */
+        PaylikeTestHelper.setPositionRelativeOn('div[data-ui-id="page-actions-toolbar-content-header"]');
+        PaylikeTestHelper.setPositionRelativeOn('div[class="admin__data-grid-header"]');
+        PaylikeTestHelper.setPositionRelativeOn('tr[data-bind="foreach: {data: getVisible(), as: \'$col\'}"]');
 
         /**
          * Take specific action on order
@@ -174,73 +173,46 @@ export var TestMethods = {
      paylikeActionOnOrderAmount(paylikeAction, partialAmount = false) {
         switch (paylikeAction) {
             case 'capture':
-                cy.get('@orderStatusForCapture').then(orderStatusForCapture => {
-                    cy.selectOptionContaining('#input-order-status', orderStatusForCapture);
-                });
+                cy.get('button[data-ui-id="sales-order-ready-for-pickup-order-invoice-button"]').click();
+                cy.get('select[name="invoice[capture_case]"]').select('online');
+                cy.get('button[data-ui-id="order-items-submit-button"]').click();
                 break;
             case 'refund':
+                cy.get('#sales_order_view_tabs_order_invoices').click();
+                cy.get('a[href*="/order_invoice/view/invoice_id/"]').first().click();
+                cy.get('button[data-ui-id="sales-invoice-view-credit-memo-button"]').click();
+                /** Keep partial amount. */
                 if (partialAmount) {
                     /**
-                     * Put 8 major units to be refunded.
+                     * Put 8 major units to be subtracted from amount.
                      * Premise: any product must have price >= 8.
                      */
-                    this.goToAdminPage('/index.php?route=extension/payment/paylike/payments');
-                    cy.get('.btn.btn-default.dropdown-toggle').first().click();
-                    cy.get('a[data-type=Refund]').first().click();
-                    cy.get('#plt-amount').clear().type(8);
-                    cy.get('.runtransaction').click();
-                    /** Check if success message. */
-                    cy.get('.alert.alert-success').should('be.visible');
-                    /** No further action. */
-                    return;
-                } else {
-                    cy.get('@orderStatusForRefund').then(orderStatusForRefund => {
-                        cy.selectOptionContaining('#input-order-status', orderStatusForRefund);
-                    });
+                    cy.get('input[name="creditmemo[adjustment_negative]"]').clear().type(8);
+                    cy.get('button[data-ui-id="update-totals-button"]').click();
                 }
+                /** Submit. */
+                cy.get('button[data-ui-id="order-items-submit-button"]').click();
                 break;
             case 'void':
-                cy.get('@orderStatusForVoid').then(orderStatusForVoid => {
-                    cy.selectOptionContaining('#input-order-status', orderStatusForVoid);
-                });
+                cy.get('button[data-ui-id="sales-order-ready-for-pickup-void-payment-button"]').click();
+                cy.get('button.action-primary.action-accept').should('be.visible').click();
                 break;
         }
 
-        cy.get('#button-history').click();
-
-        cy.wait(300);
-
         /** Check if success message. */
-        cy.get('.alert.alert-success').should('be.visible');
+        cy.get('div[data-ui-id="messages-message-success"]').should('be.visible');
     },
 
     /**
      * Change shop currency in frontend
      */
     changeShopCurrency(currency) {
-        cy.get('.btn.btn-link.dropdown-toggle').click();
-        cy.get(`button[name=${currency}]`).click();
-    },
-
-    /**
-     * Get Paylike order statuses from settings
-     */
-     getPaylikeOrderStatuses() {
-        /** Go to paylike method. */
-        this.goToAdminPage(this.PaymentMethodsAdminUrl);
-
-        /** Select advanced tab. */
-        cy.get('a[href="#tab-advanced_settings"]').click();
-
-        /** Get order statuses for capture, refund & void. */
-        cy.get('#input_capture_status_id > option[selected=selected]').then($captureStatus => {
-            cy.wrap($captureStatus.text()).as('orderStatusForCapture');
-        });
-        cy.get('#input_refund_status_id > option[selected=selected]').then($refundStatus => {
-            cy.wrap($refundStatus.text()).as('orderStatusForRefund');
-        });
-        cy.get('#input_void_status_id > option[selected=selected]').then($voidStatus => {
-            cy.wrap($voidStatus.text()).as('orderStatusForVoid');
+        cy.get('#switcher-currency-trigger').then($actualCurrency => {
+            /** Check if currency is not already selected, then select it. */
+            if (!$actualCurrency.text().includes(currency)) {
+                $actualCurrency.trigger('click');
+                cy.get(`li[class=currency-${currency}]`).click();
+            }
         });
     },
 
@@ -248,16 +220,19 @@ export var TestMethods = {
      * Get Shop & Paylike versions and send log data.
      */
     logVersions() {
+        /** Go to payment methods page. */
+        cy.goToPage(this.PaymentMethodsAdminUrl);
+
         /** Get framework version. */
-        cy.get('#footer').then($frameworkVersion => {
-            var frameworkVersion = ($frameworkVersion.text()).replace(/.*[^0-9.]/g, '');
+        cy.get('p.magento-version').then($footerVersion => {
+            var footerVersion = ($footerVersion.text()).replace('Magento', '');
+            var frameworkVersion = footerVersion.replace('ver. ', '');
             cy.wrap(frameworkVersion).as('frameworkVersion');
         });
 
-        this.goToAdminPage(this.PaymentMethodsAdminUrl);
-
         /** Get Paylike version. */
-        cy.get('.panel-title').invoke('attr', 'data-paylike-version').then($pluginVersion => {
+        cy.get('.paylike-version').invoke('attr', 'class').then($pluginVersion => {
+            var $pluginVersion = ($pluginVersion).replace(/[^0-9.]/g, '');
             cy.wrap($pluginVersion).as('pluginVersion');
         });
 
@@ -276,13 +251,5 @@ export var TestMethods = {
                 });
             });
         });
-    },
-
-    /**
-     * Get and add token to admin pages url
-     * @param {String} url
-     */
-    goToAdminPage(url) {
-        cy.goToPage(url + `&user_token=${this.UserTokenFromUrl}`);
     },
 }
