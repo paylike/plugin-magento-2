@@ -39,9 +39,9 @@ import './commands'
       return false
     }
     /** if other libraries don't load, we skip these errors. */
-    // if (err.message.includes("Cannot read properties of undefined (reading 'preventDefault')")) {
-    //   return false
-    // }
+    if (err.message.includes("jQuery is not defined")) {
+      return false
+    }
     /**
      * we still want to ensure there are no other unexpected
      * errors, so we let them fail the test
