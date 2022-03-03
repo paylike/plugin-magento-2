@@ -10,8 +10,6 @@ Released under the GPL V3 license: https://opensource.org/licenses/GPL-3.0
 
 [![Last succesfull test](https://log.derikon.ro/api/v1/log/read?tag=magento2&view=svg&label=Magento&key=ecommerce&background=F26322)](https://log.derikon.ro/api/v1/log/read?tag=magento2&view=html)
 
-Magento version last tested on: 2.4.3-p1
-
 *The plugin has been tested with most versions of Magento at every iteration. We recommend using the latest version of Magento, but if that is not possible for some reason, test the plugin with your Magento version and it would probably function properly.*
 
 
@@ -84,7 +82,7 @@ Under the Magento Paylike payment method settings, you can:
   * To update or upgrade the module run following commands:
        - `composer update esparks/module-paylike` (upgrade to latest version)<br>
        or (for eg.)
-       - `composer require esparks/module-paylike ^1.4.1` (upgrade to version 1.4.1)
+       - `composer require esparks/module-paylike ^1.4.2` (upgrade to version 1.4.2)
 
   * After that, run the following commands:
       - `php bin/magento setup:upgrade --keep-generated`

@@ -8,7 +8,7 @@ window.PaylikeLogger = {
       }
 
       this.context = context;
-      this.$ = $;
+      this.jQuery = jQuery;
       this.url = url;
     },
     log: async function(message, data = {}) {
@@ -24,7 +24,7 @@ window.PaylikeLogger = {
         context: this.context,
       }
 
-      this.$.ajax({
+      this.jQuery.ajax({
         url: this.url.build("paylike/index/Log"),
         type: 'POST',
         dataType: 'text',
