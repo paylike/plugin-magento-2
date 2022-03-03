@@ -78,6 +78,8 @@ export var TestMethods = {
      * @param {String} currency
      */
     makePaymentFromFrontend(currency) {
+        /** Clear local storage to show currency change. */
+        cy.clearLocalStorage();
         /**
          * Go to specific product page.
          */
@@ -93,23 +95,30 @@ export var TestMethods = {
         /** Go next. */
         cy.get('.button > span', {timeout: 40000}).click();
 
-        /** Wait for page to load. */
-        // cy.wait(10000);
-
-        // /** Check amount. */
-        // cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
-        //     var expectedAmount = PaylikeTestHelper.filterAndGetAmountInMinor($grandTotal, currency);
-        //     cy.window().then($win => {
-        //         expect(expectedAmount).to.eq(Number($win.checkoutConfig.config.amount.value));
-        //     });
-        // });
-
         /** Choose Paylike. */
-        cy.get(`input[value*=${this.PaylikeName}]`).click();
+        cy.get(`input[value*=${this.PaylikeName}]`, {timeout: 30000}).click();
 
+        /** Get amount. */
+        cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
+            var expectedAmount = PaylikeTestHelper.filterAndGetAmountInMinor($grandTotal, currency);
+            cy.wrap(expectedAmount).as('expectedAmount');
+        });
 
         /** Show paylike popup. */
         cy.get(':nth-child(5) > div.primary > .action').click();
+
+
+        /**
+         * Check amount.
+         * We check here because "window.checkoutConfig.config.amount.value"
+         * is not present every moment we need it.
+         */
+        cy.get('@expectedAmount').then(expectedAmount => {
+            cy.get('.paylike .payment .amount').then(paylikeTextAmount => {
+                var paylikeAmount = PaylikeTestHelper.filterAndGetAmountInMinor(paylikeTextAmount, currency);
+                expect(expectedAmount).to.eq(paylikeAmount);
+            });
+        });
 
         /**
          * Fill in Paylike popup.
@@ -170,15 +179,18 @@ export var TestMethods = {
             case 'refund':
                 cy.get('#sales_order_view_tabs_order_invoices').click();
                 cy.get('tr.data-row', {timeout: 30000}).first().click();
-                cy.get('#credit-memo').click();
+                cy.get('#credit-memo', {timeout: 20000}).click();
                 /** Keep partial amount. */
                 if (partialAmount) {
                     /**
                      * Put 8 major units to be subtracted from amount.
                      * Premise: any product must have price >= 8.
+                     * *** Press enter after changing input to activate update button
                      */
-                    cy.get('input[name="creditmemo[adjustment_negative]"]').clear().type(8);
+                    cy.get('input[name="creditmemo[adjustment_negative]"]').clear().type(`${8}{enter}`);
                     cy.get('button[data-ui-id="update-totals-button"]').click();
+                    /** Wait for Refund button to be re-attach to the DOM. */
+                    cy.wait(2000);
                 }
                 /** Submit. */
                 cy.get('button[data-ui-id="order-items-submit-button"]').click();
@@ -200,16 +212,6 @@ export var TestMethods = {
         // cy.get('#switcher-currency-trigger').then($actualCurrency => {
         //     /** Check if currency is not already selected, then select it. */
         //     if (!$actualCurrency.text().includes(currency)) {
-        //         /**
-        //          * We need to "refresh" form_key cookie to be able to change currency
-        //          * The cookie is set at the beginning, but not refresh during
-        //          * frontend/backend page switch
-        //          * (we get "invalid form key" error when click on selected currency)
-        //          * Then, we collect form_key from DOM, and set to cookie again
-        //          */
-        //         let formKey = Cypress.$('input[name=form_key]').first().val();
-        //         cy.setCookie('form_key', formKey)
-
         //         Cypress.$('#switcher-currency ul').attr('style', 'display: block;');
         //         cy.get(`#switcher-currency li.currency-${currency} a`).click();
         //     }
@@ -224,8 +226,6 @@ export var TestMethods = {
             cy.goToPage(this.ConfigCurrencyAdminUrl);
             cy.get('#currency_options_default').select(currency);
             cy.get('button[data-ui-id="page-actions-toolbar-save-button"]').click();
-            /** Clear local storage to show currency change. */
-            cy.clearLocalStorage();
             // cy.goToPage('/admin/cache');
             // cy.get('#flush_magento').click();
         });
