@@ -42,6 +42,9 @@ import './commands'
     if (err.message.includes("jQuery is not defined")) {
       return false
     }
+    if (err.message.includes("Cannot read properties of undefined (reading 'fullScreen')")) {
+      return false
+    }
     /**
      * we still want to ensure there are no other unexpected
      * errors, so we let them fail the test
