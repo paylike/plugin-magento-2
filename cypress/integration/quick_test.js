@@ -37,6 +37,9 @@ describe('paylike plugin quick test', () => {
         TestMethods.changePaylikeCaptureMode(captureMode);
     });
 
+    /** Change store currency. */
+    TestMethods.changeShopCurrencyFromAdmin(currency);
+
     /** Pay and process order. */
     /** Capture */
     TestMethods.payWithSelectedCurrency(currency, 'capture');
