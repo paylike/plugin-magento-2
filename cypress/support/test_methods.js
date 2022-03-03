@@ -177,9 +177,11 @@ export var TestMethods = {
                 cy.get('button[data-ui-id="order-items-submit-button"]').click();
                 break;
             case 'refund':
-                cy.get('#sales_order_view_tabs_order_invoices').click();
+                    /** The following line not work always. */
+                    // cy.get('#sales_order_view_tabs_order_invoices').click();
+                /** Access invoices table by removing display:none from it. */
+                cy.removeDisplayNoneFrom('#sales_order_view_tabs_order_invoices_content');
                 /** Wait for invoices table to be displayed. */
-                cy.wait(2000);
                 cy.get('tr.data-row', {timeout: 30000}).first().click();
                 cy.get('#credit-memo', {timeout: 20000}).click();
                 /** Keep partial amount. */
