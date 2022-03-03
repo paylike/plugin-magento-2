@@ -16,6 +16,7 @@ export var TestMethods = {
     PaylikeName: 'paylike',
     PaymentMethodsAdminUrl: '/admin/system_config/edit/section/payment/',
     OrdersPageAdminUrl: '/sales/order/',
+    ConfigCurrencyAdminUrl: '/admin/system_config/edit/section/currency/#currency_options-link',
 
     /**
      * Login to admin backend account
@@ -82,40 +83,30 @@ export var TestMethods = {
          */
         cy.goToPage(this.StoreUrl + '/fusion-backpack.html', {timeout: 20000});
 
-        this.changeShopCurrency(currency);
+        // this.changeShopCurrency(currency);
 
-        /** Wait for page to load. */
-        cy.wait(5000);
-
-        cy.get('#product-addtocart-button', {timeout: 4000}).click();
+        cy.get('#product-addtocart-button', {timeout: 20000}).click();
 
         /** Go to shipping step. */
-        cy.goToPage(this.StoreUrl + '/checkout', {timeout: 20000});
+        cy.goToPage(this.StoreUrl + '/checkout');
 
-        /** Wait for page to load. */
-        cy.wait(30000);
-
-        /** Make sure that shipping method is selected. */
-        cy.get('input[value=flatrate_flatrate]').click();
         /** Go next. */
-        cy.get('.button > span').click();
+        cy.get('.button > span', {timeout: 40000}).click();
 
         /** Wait for page to load. */
-        cy.wait(10000);
+        // cy.wait(10000);
+
+        // /** Check amount. */
+        // cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
+        //     var expectedAmount = PaylikeTestHelper.filterAndGetAmountInMinor($grandTotal, currency);
+        //     cy.window().then($win => {
+        //         expect(expectedAmount).to.eq(Number($win.checkoutConfig.config.amount.value));
+        //     });
+        // });
 
         /** Choose Paylike. */
         cy.get(`input[value*=${this.PaylikeName}]`).click();
 
-        /** Wait the price to refresh. */
-        cy.wait(15000);
-
-        /** Check amount. */
-        cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
-            var expectedAmount = PaylikeTestHelper.filterAndGetAmountInMinor($grandTotal, currency);
-            cy.window().then($win => {
-                expect(expectedAmount).to.eq(Number($win.checkoutConfig.config.amount.value));
-            });
-        });
 
         /** Show paylike popup. */
         cy.get(':nth-child(5) > div.primary > .action').click();
@@ -125,9 +116,7 @@ export var TestMethods = {
          */
          PaylikeTestHelper.fillAndSubmitPaylikePopup();
 
-        cy.wait(2000);
-
-        cy.get('h1 > span.base').should('contain', 'Thank you for your purchase!');
+        cy.get('h1 > span.base', {timeout: 20000}).should('contain', 'Thank you for your purchase!');
     },
 
     /**
@@ -140,20 +129,25 @@ export var TestMethods = {
         cy.goToPage(this.OrdersPageAdminUrl);
 
         /** Wait to load orders. */
-        cy.wait(20000);
+        cy.wait(5000);
+
+        /** Remove spinner elements from dom. */
+        cy.get('div.sticky-header').then(($stickyHeader) => {
+            $stickyHeader.remove();
+        });
+        cy.get('div[data-role="spinner"]').then(($spinner) => {
+            $spinner.remove();
+        });
 
         /** Set position relative on toolbars. */
         PaylikeTestHelper.setPositionRelativeOn('header.page-header.row');
-        PaylikeTestHelper.setPositionRelativeOn('div.sticky-header');
         PaylikeTestHelper.setPositionRelativeOn('tr[data-bind="foreach: {data: getVisible(), as: \'$col\'}"]');
         PaylikeTestHelper.setPositionRelativeOn('.admin__data-grid-header');
         PaylikeTestHelper.setPositionRelativeOn('.page-main-actions');
         PaylikeTestHelper.setPositionRelativeOn('div[data-ui-id="page-actions-toolbar-content-header"]');
 
-        cy.wait(20000);
-
         /** Click on first (latest in time) order from orders table. */
-        cy.get('tr.data-row').first().click();
+        cy.get('tr.data-row', {timeout: 30000}).first().click();
 
         /**
          * Take specific action on order
@@ -169,16 +163,14 @@ export var TestMethods = {
      paylikeActionOnOrderAmount(paylikeAction, partialAmount = false) {
         switch (paylikeAction) {
             case 'capture':
-                cy.get('button[data-ui-id="sales-order-ready-for-pickup-order-invoice-button"]').click();
+                cy.get('#order_invoice').click();
                 cy.get('select[name="invoice[capture_case]"]').select('online');
                 cy.get('button[data-ui-id="order-items-submit-button"]').click();
                 break;
             case 'refund':
                 cy.get('#sales_order_view_tabs_order_invoices').click();
-                /** Wait to load invoices. */
-                cy.wait(20000);
-                cy.get('a[href*="/order_invoice/view/invoice_id/"]').first().click();
-                cy.get('button[data-ui-id="sales-invoice-view-credit-memo-button"]').click();
+                cy.get('tr.data-row', {timeout: 30000}).first().click();
+                cy.get('#credit-memo').click();
                 /** Keep partial amount. */
                 if (partialAmount) {
                     /**
@@ -192,35 +184,50 @@ export var TestMethods = {
                 cy.get('button[data-ui-id="order-items-submit-button"]').click();
                 break;
             case 'void':
-                cy.get('button[data-ui-id="sales-order-ready-for-pickup-void-payment-button"]').click();
+                cy.get('#void_payment').click();
                 cy.get('button.action-primary.action-accept').should('be.visible').click();
                 break;
         }
 
         /** Check if success message. */
-        cy.get('div[data-ui-id="messages-message-success"]').should('be.visible');
+        cy.get('div[data-ui-id="messages-message-success"]', {timeout: 20000}).should('be.visible');
     },
 
     /**
      * Change shop currency in frontend
      */
     changeShopCurrency(currency) {
-        cy.get('#switcher-currency-trigger').then($actualCurrency => {
-            /** Check if currency is not already selected, then select it. */
-            if (!$actualCurrency.text().includes(currency)) {
-                /**
-                 * We need to "refresh" form_key cookie to be able to change currency
-                 * The cookie is set at the beginning, but not refresh during
-                 * frontend/backend page switch
-                 * (we get "invalid form key" error when click on selected currency)
-                 * Then, we collect form_key from DOM, and set to cookie again
-                 */
-                let formKey = Cypress.$('input[name=form_key]').first().val();
-                cy.setCookie('form_key', formKey)
+        // cy.get('#switcher-currency-trigger').then($actualCurrency => {
+        //     /** Check if currency is not already selected, then select it. */
+        //     if (!$actualCurrency.text().includes(currency)) {
+        //         /**
+        //          * We need to "refresh" form_key cookie to be able to change currency
+        //          * The cookie is set at the beginning, but not refresh during
+        //          * frontend/backend page switch
+        //          * (we get "invalid form key" error when click on selected currency)
+        //          * Then, we collect form_key from DOM, and set to cookie again
+        //          */
+        //         let formKey = Cypress.$('input[name=form_key]').first().val();
+        //         cy.setCookie('form_key', formKey)
 
-                Cypress.$('#switcher-currency ul').attr('style', 'display: block;');
-                cy.get(`#switcher-currency li.currency-${currency} a`).click();
-            }
+        //         Cypress.$('#switcher-currency ul').attr('style', 'display: block;');
+        //         cy.get(`#switcher-currency li.currency-${currency} a`).click();
+        //     }
+        // });
+    },
+
+    /**
+     * Change shop currency from admin
+     */
+    changeShopCurrencyFromAdmin(currency) {
+        it('Change store currency from admin panel', () => {
+            cy.goToPage(this.ConfigCurrencyAdminUrl);
+            cy.get('#currency_options_default').select(currency);
+            cy.get('button[data-ui-id="page-actions-toolbar-save-button"]').click();
+            /** Clear local storage to show currency change. */
+            cy.clearLocalStorage();
+            // cy.goToPage('/admin/cache');
+            // cy.get('#flush_magento').click();
         });
     },
 
