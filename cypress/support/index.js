@@ -31,18 +31,21 @@ import './commands'
  */
  Cypress.on('uncaught:exception', (err, runnable) => {
     /**
-     * we expect a 3rd party library error with message 'google is not defined'
+     * we expect a 3rd party library error with message '... is not defined'
      * and don't want to fail the test so we return false
      *
     */
+    if (err.message.includes("jQuery is not defined")) {
+        return false
+    }
+    /** if other specific js code don't load, we skip these errors. */
     if (err.message.includes('Unable to process binding "afterRender: function(){return renderReCaptcha() }"')) {
       return false
     }
-    /** if other libraries don't load, we skip these errors. */
-    if (err.message.includes("jQuery is not defined")) {
+    if (err.message.includes("Cannot read properties of undefined (reading 'fullScreen')")) {
       return false
     }
-    if (err.message.includes("Cannot read properties of undefined (reading 'fullScreen')")) {
+    if (err.message.includes("setLocation is not defined")) {
       return false
     }
     /**
