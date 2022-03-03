@@ -178,6 +178,8 @@ export var TestMethods = {
                 break;
             case 'refund':
                 cy.get('#sales_order_view_tabs_order_invoices').click();
+                /** Wait for invoices table to be displayed. */
+                cy.wait(2000);
                 cy.get('tr.data-row', {timeout: 30000}).first().click();
                 cy.get('#credit-memo', {timeout: 20000}).click();
                 /** Keep partial amount. */
