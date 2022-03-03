@@ -78,16 +78,14 @@ export var TestMethods = {
      */
     makePaymentFromFrontend(currency) {
         /**
-         * Select specific product.
+         * Go to specific product page.
          */
-        var randomInt = PaylikeTestHelper.getRandomInt(/*max*/ 1);
-        if (0 === randomInt) {
-            cy.goToPage(this.StoreUrl + '/fusion-backpack.html', {timeout: 20000});
-        } else {
-            cy.goToPage(this.StoreUrl + '/impulse-duffle.html', {timeout: 20000});
-        }
+        cy.goToPage(this.StoreUrl + '/fusion-backpack.html', {timeout: 20000});
 
         this.changeShopCurrency(currency);
+
+        /** Wait for page to load. */
+        cy.wait(5000);
 
         cy.get('#product-addtocart-button', {timeout: 4000}).click();
 
@@ -95,19 +93,21 @@ export var TestMethods = {
         cy.goToPage(this.StoreUrl + '/checkout', {timeout: 20000});
 
         /** Wait for page to load. */
-        cy.wait(15000);
+        cy.wait(30000);
 
+        /** Make sure that shipping method is selected. */
+        cy.get('input[value=flatrate_flatrate]').click();
         /** Go next. */
         cy.get('.button > span').click();
 
         /** Wait for page to load. */
-        cy.wait(5000);
+        cy.wait(10000);
 
         /** Choose Paylike. */
         cy.get(`input[value*=${this.PaylikeName}]`).click();
 
         /** Wait the price to refresh. */
-        cy.wait(10000);
+        cy.wait(15000);
 
         /** Check amount. */
         cy.get('td[data-th="Order Total"] > strong > span.price').then($grandTotal => {
@@ -137,21 +137,23 @@ export var TestMethods = {
      */
     processOrderFromAdmin(paylikeAction, partialAmount = false) {
         /** Go to admin orders page. */
-        cy.goToPage(this.OrdersPageAdminUrl, {timeout: 20000});
+        cy.goToPage(this.OrdersPageAdminUrl);
 
         /** Wait to load orders. */
-        cy.get('div[class*="loading-mask"]').should('not.be.visible');
-        cy.wait(15000);
+        cy.wait(20000);
 
         /** Set position relative on toolbars. */
         PaylikeTestHelper.setPositionRelativeOn('header.page-header.row');
+        PaylikeTestHelper.setPositionRelativeOn('div.sticky-header');
         PaylikeTestHelper.setPositionRelativeOn('tr[data-bind="foreach: {data: getVisible(), as: \'$col\'}"]');
         PaylikeTestHelper.setPositionRelativeOn('.admin__data-grid-header');
         PaylikeTestHelper.setPositionRelativeOn('.page-main-actions');
         PaylikeTestHelper.setPositionRelativeOn('div[data-ui-id="page-actions-toolbar-content-header"]');
 
+        cy.wait(20000);
+
         /** Click on first (latest in time) order from orders table. */
-        cy.get('tr.data-row', {timeout: 10000}).first().click();
+        cy.get('tr.data-row').first().click();
 
         /**
          * Take specific action on order
@@ -173,6 +175,8 @@ export var TestMethods = {
                 break;
             case 'refund':
                 cy.get('#sales_order_view_tabs_order_invoices').click();
+                /** Wait to load invoices. */
+                cy.wait(20000);
                 cy.get('a[href*="/order_invoice/view/invoice_id/"]').first().click();
                 cy.get('button[data-ui-id="sales-invoice-view-credit-memo-button"]').click();
                 /** Keep partial amount. */
@@ -204,10 +208,18 @@ export var TestMethods = {
         cy.get('#switcher-currency-trigger').then($actualCurrency => {
             /** Check if currency is not already selected, then select it. */
             if (!$actualCurrency.text().includes(currency)) {
+                /**
+                 * We need to "refresh" form_key cookie to be able to change currency
+                 * The cookie is set at the beginning, but not refresh during
+                 * frontend/backend page switch
+                 * (we get "invalid form key" error when click on selected currency)
+                 * Then, we collect form_key from DOM, and set to cookie again
+                 */
+                let formKey = Cypress.$('input[name=form_key]').first().val();
+                cy.setCookie('form_key', formKey)
+
                 Cypress.$('#switcher-currency ul').attr('style', 'display: block;');
-                cy.get(`#switcher-currency li.currency-${currency}`).click();
-                /** Wait the price to refresh. */
-                cy.wait(2000);
+                cy.get(`#switcher-currency li.currency-${currency} a`).click();
             }
         });
     },
