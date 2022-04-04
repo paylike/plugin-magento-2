@@ -23,7 +23,6 @@ export var TestMethods = {
      */
     loginIntoAdminBackend() {
         cy.loginIntoAccount('input[name="login[username]"]', 'input[name="login[password]"]', 'admin');
-        // cy.wait(5000);
     },
     /**
      * Login to client|user frontend account
@@ -213,6 +212,10 @@ export var TestMethods = {
      * Change shop currency in frontend
      */
     changeShopCurrency(currency) {
+        /**
+         * (intentionally left commented).
+         * Maybe this can be used in the future to change currency in store front.
+         */
         // cy.get('#switcher-currency-trigger').then($actualCurrency => {
         //     /** Check if currency is not already selected, then select it. */
         //     if (!$actualCurrency.text().includes(currency)) {
