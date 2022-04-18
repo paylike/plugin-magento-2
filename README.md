@@ -1,4 +1,4 @@
-# Magento 2.* plugin for Paylike [![CircleCI](https://circleci.com/gh/paylike/plugin-magento-2.svg?style=shield)](https://circleci.com/gh/paylike/plugin-magento-2)
+# Magento 2.* plugin for Paylike
 
 This plugin is *not* developed or maintained by Paylike but kindly made
 available by a user.
@@ -82,7 +82,7 @@ Under the Magento Paylike payment method settings, you can:
   * To update or upgrade the module run following commands:
        - `composer update esparks/module-paylike` (upgrade to latest version)<br>
        or (for eg.)
-       - `composer require esparks/module-paylike ^1.4.2` (upgrade to version 1.4.2)
+       - `composer require esparks/module-paylike ^1.4.3` (upgrade to version 1.4.3)
 
   * After that, run the following commands:
       - `php bin/magento setup:upgrade --keep-generated`
