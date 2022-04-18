@@ -32,7 +32,7 @@ define(
 
 
             /** Change test key value from string 'test' with a boolean value. */
-            paylikeConfig.test = ('test' == paylikeConfig.test) ? (true) : (false);
+            paylikeConfig.test = ('test' === paylikeConfig.test) ? (true) : (false);
 
             quote.guestEmail = window.checkoutConfig.customerData.email;
             /** Need to be logged in to perform checkout with multishipping. */

@@ -10,7 +10,7 @@
     <!-- Payment Method Facade configuration -->
     <virtualType name="PaylikeFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">\Esparks\Paylike\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="code" xsi:type="const">\Esparks\Paylike\Model\Ui\ConfigProvider::PLUGIN_CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Esparks\Paylike\Block\Info</argument>
             <argument name="valueHandlerPool" xsi:type="object">PaylikeValueHandlerPool</argument>
@@ -21,7 +21,7 @@
     <!-- Configuration reader -->
     <virtualType name="PaylikeConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">\Esparks\Paylike\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="methodCode" xsi:type="const">\Esparks\Paylike\Model\Ui\ConfigProvider::PLUGIN_CODE</argument>
         </arguments>
     </virtualType>
 
@@ -200,12 +200,6 @@
     </virtualType>
 
     <type name="Esparks\Paylike\Block\Info">
-        <arguments>
-            <argument name="config" xsi:type="object">PaylikeConfig</argument>
-        </arguments>
-    </type>
-
-    <type name="Esparks\Paylike\Model\Adapter\PaylikeAdapter">
         <arguments>
             <argument name="config" xsi:type="object">PaylikeConfig</argument>
         </arguments>
