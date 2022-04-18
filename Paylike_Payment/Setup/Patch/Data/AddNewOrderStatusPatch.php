@@ -65,7 +65,7 @@ class AddNewOrderStatusPatch implements DataPatchInterface, PatchVersionInterfac
         /**
          * Call revert function to be sure to not insert data twice
          */
-        // $this->revert();
+        $this->revert();
 
         /**
          * Prepare database for install
