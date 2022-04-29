@@ -48,6 +48,13 @@ import './commands'
     if (err.message.includes("setLocation is not defined")) {
       return false
     }
+
+    /**
+     * TEMPORARY ADDED
+     */
+     if (err.message.includes("Script error")) {
+      return false
+    }
     /**
      * we still want to ensure there are no other unexpected
      * errors, so we let them fail the test
