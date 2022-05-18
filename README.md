@@ -82,7 +82,7 @@ Under the Magento Paylike payment method settings, you can:
   * To update or upgrade the module run following commands:
        - `composer update esparks/module-paylike` (upgrade to latest version)<br>
        or (for eg.)
-       - `composer require esparks/module-paylike ^1.4.3` (upgrade to version 1.4.3)
+       - `composer require esparks/module-paylike ^1.0.1` (upgrade to version 1.0.1)
 
   * After that, run the following commands:
       - `php bin/magento setup:upgrade --keep-generated`

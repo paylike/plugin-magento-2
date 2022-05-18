@@ -14,7 +14,7 @@ use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
  */
 class ConfigProvider implements ConfigProviderInterface {
 	const PLUGIN_CODE = 'paylikepaymentmethod';
-	const MAGENTO_PAYLIKE_VERSION = '1.4.3';
+	const MAGENTO_PAYLIKE_VERSION = '1.4.4';
 	protected $scopeConfig;
 	protected $_cart;
 	protected $_assetRepo;
