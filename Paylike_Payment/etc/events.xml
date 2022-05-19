@@ -13,4 +13,7 @@
     <event name="checkout_submit_all_after">
         <observer name="paylike_checkout_submit_all_after" instance="Esparks\Paylike\Observer\CheckoutAllSubmitAfterObserver"/>
     </event>
+    <event name="sales_order_payment_void">
+        <observer name="paylike_sales_order_payment_void" instance="Esparks\Paylike\Observer\SalesOrderPaymentVoidObserver"/>
+    </event>
 </config>
