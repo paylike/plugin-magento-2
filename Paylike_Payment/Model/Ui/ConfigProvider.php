@@ -13,8 +13,8 @@ use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
  * Class ConfigProvider
  */
 class ConfigProvider implements ConfigProviderInterface {
-	const CODE = 'paylikepaymentmethod';
-	const MAGENTO_PAYLIKE_VERSION = '1.4.1';
+	const PLUGIN_CODE = 'paylikepaymentmethod';
+	const MAGENTO_PAYLIKE_VERSION = '1.4.4';
 	protected $scopeConfig;
 	protected $_cart;
 	protected $_assetRepo;
@@ -51,7 +51,7 @@ class ConfigProvider implements ConfigProviderInterface {
 	public function getConfig() {
 		return [
 			'payment'      => [
-				self::CODE => [
+				self::PLUGIN_CODE => [
 					'transactionResults' => [
 						TransactionAuthorize::SUCCESS => __( 'Success' ),
 						TransactionAuthorize::FAILURE => __( 'Fraud' )

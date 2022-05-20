@@ -5,56 +5,72 @@
  */
 namespace Esparks\Paylike\Observer;
 
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\DB\TransactionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Model\Method\Logger;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
+use Magento\Sales\Model\Service\InvoiceService;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Store\Model\ScopeInterface;
+
 
 class CheckoutAllSubmitAfterObserver implements ObserverInterface
 {
+    const PLUGIN_CODE = 'paylikepaymentmethod';
+
     /**
      * @var Logger
      */
     private $logger;
-    
+
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
      *
-     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory
+     * @var CollectionFactory
      */
     protected $invoiceCollectionFactory;
 
     /**
      *
-     * @var \Magento\Sales\Model\Service\InvoiceService
+     * @var InvoiceService
      */
     protected $invoiceService;
 
+    /**
+     *
+     * @var InvoiceSender
+     */
     protected $invoiceSender;
 
     /**
      *
-     * @var \Magento\Framework\DB\TransactionFactory
+     * @var TransactionFactory
      */
     protected $transactionFactory;
 
     /**
      * @param Logger $logger
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory
-     * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
-     * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CollectionFactory $invoiceCollectionFactory
+     * @param InvoiceService $invoiceService
+     * @param TransactionFactory $transactionFactory
+     * @param InvoiceSender $invoiceSender
      */
     public function __construct(
         Logger $logger,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory,
-        \Magento\Sales\Model\Service\InvoiceService $invoiceService,
-        \Magento\Framework\DB\TransactionFactory $transactionFactory,
-        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
+        ScopeConfigInterface $scopeConfig,
+        CollectionFactory $invoiceCollectionFactory,
+        InvoiceService $invoiceService,
+        TransactionFactory $transactionFactory,
+        InvoiceSender $invoiceSender
     ) {
         $this->logger = $logger;
         $this->scopeConfig = $scopeConfig;
@@ -71,68 +87,82 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $order = $observer->getEvent()->getOrder();
-        if(!isset($order)){
-         return $this;
-     }
-     $payment = $order->getPayment();
-     $method = $payment->getMethodInstance();
-     $methodName = $payment->getMethod();
+        $captureMode =  $this->scopeConfig->getValue('payment/' . self::PLUGIN_CODE . '/capture_mode', ScopeInterface::SCOPE_STORE);
+        $invoiceEmailMode =  $this->scopeConfig->getValue('payment/' . self::PLUGIN_CODE . '/invoice_email', ScopeInterface::SCOPE_STORE);
 
-     if ($methodName != "paylikepaymentmethod"){
+        /** Check for "order" - normal checkout flow. */
+        $order = $observer->getEvent()->getOrder();
+        /** Check for "orders" - multishipping checkout flow. */
+        $orders = $observer->getEvent()->getOrders();
+
+        if (!empty($order)) {
+            $this->processOrder($order, $captureMode, $invoiceEmailMode);
+        } elseif (!empty($orders)) {
+            foreach ($orders as $order) {
+                $this->processOrder($order, $captureMode, $invoiceEmailMode);
+            }
+        }
+
         return $this;
     }
 
-    $capturemode =  $this->scopeConfig->getValue('payment/paylikepaymentmethod/capture_mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    /**
+     * @param Order $order
+     * @param $captureMode
+     * @param $invoiceEmailMode
+     */
+    private function processOrder(Order $order, $captureMode, $invoiceEmailMode)
+    {
+        $payment = $order->getPayment();
+        $methodName = $payment->getMethod();
 
-    if($capturemode == "instant"){
-        if(!$order->getId()) {
+        if ($methodName != self::PLUGIN_CODE) {
             return $this;
         }
 
-
-        try {
-            $invoices = $this->invoiceCollectionFactory->create()
-            ->addAttributeToFilter('order_id', array('eq' => $order->getId()));
-            $invoices->getSelect()->limit(1);
-
-            if ((int)$invoices->count() !== 0) {
-                return null;
+        if ("instant" == $captureMode) {
+            if (!$order->getId()) {
+                return $this;
             }
 
-            if(!$order->canInvoice()) {
-                return null;
-            }
+            try {
+                $invoices = $this->invoiceCollectionFactory->create()
+                    ->addAttributeToFilter('order_id', array('eq' => $order->getId()));
+                $invoices->getSelect()->limit(1);
 
-            $invoice = $this->invoiceService->prepareInvoice($order);
-            $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-            $invoice->register();
-            $invoice->getOrder()->setCustomerNoteNotify(false);
-            $invoice->getOrder()->setIsInProcess(true);
-            $transactionSave = $this->transactionFactory->create()->addObject($invoice)->addObject($invoice->getOrder());
-            $transactionSave->save();
-
-            $invoiceEmailmode =  $this->scopeConfig->getValue('payment/paylikepaymentmethod/invoice_email', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-            if (!$invoice->getEmailSent() && $invoiceEmailmode==1) {
-                try {
-                    $this->invoiceSender->send($invoice);
-                } catch (\Exception $e) {
-                        // Do something if failed to send                          
+                if ((int)$invoices->count() !== 0) {
+                    return null;
                 }
+
+                if (!$order->canInvoice()) {
+                    return null;
+                }
+
+                $invoice = $this->invoiceService->prepareInvoice($order);
+                $invoice->setRequestedCaptureCase(Invoice::CAPTURE_ONLINE);
+                $invoice->register();
+                $invoice->getOrder()->setCustomerNoteNotify(false);
+                $invoice->getOrder()->setIsInProcess(true);
+                $transactionSave = $this->transactionFactory->create()->addObject($invoice)->addObject($invoice->getOrder());
+                $transactionSave->save();
+
+                if (!$invoice->getEmailSent() && $invoiceEmailMode == 1) {
+                    try {
+                        $this->invoiceSender->send($invoice);
+                    } catch (\Exception $e) {
+                        // Do something if failed to send
+                    }
+                }
+            } catch (\Exception $e) {
+                $order->addStatusHistoryComment('Exception message: ' . $e->getMessage(), false); // addStatusHistoryComment() is deprecated !
+                $order->save(); // save() is deprecated !
+                return null;
             }
-        } catch (\Exception $e) {
-            $order->addStatusHistoryComment('Exception message: '.$e->getMessage(), false);
+        }
+        else if ("delayed" == $captureMode) {
+
+            $order->setState(Order::STATE_PENDING_PAYMENT)->setStatus(Order::STATE_PENDING_PAYMENT);
             $order->save();
-            return null;
         }
     }
-
-    else if($capturemode == "delayed"){
-
-        $order->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)->setStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
-        $order->save();
-    }
-
-    return $this;
-}
 }
