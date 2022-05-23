@@ -27,7 +27,7 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Esparks_Paylike/payment/paylikepaymentmethod',
+                template: 'Lunar_Paylike/payment/paylikepaymentmethod',
                 payliketransactionid: ''
             },
 

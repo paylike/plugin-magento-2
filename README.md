@@ -35,7 +35,7 @@ Once you have installed Magento, follow these simple steps:
   5. Login to your Magento 2.x Hosting site (for details contact your hosting provider);
   6. Open some kind File Manager for listing Hosting files and directories and locate the Magento root directory where Magento 2.x is installed (also can be FTP or Filemanager in CPanel for example);
   7. Unzip the file in a temporary directory;
-  8. Upload the content of the unzipped extension without the original folder (only content of unzipped folder) into the Magneto “<MAGENTO_ROOT_FOLDER>/app/code/Esparks/Paylike/” folder (create empty folders "code/Esparks/Paylike/");
+  8. Upload the content of the unzipped extension without the original folder (only content of unzipped folder) into the Magneto “<MAGENTO_ROOT_FOLDER>/app/code/Lunar/Paylike/” folder (create empty folders "code/Lunar/Paylike/");
   9. Login to your Magento 2.x Hosting site using SSH connection (for details contact our hosting provider);
   10. Run the following commands from the Magento root directory:
     * `php bin/magento setup:upgrade`
@@ -54,8 +54,8 @@ Once you have installed Magento, follow these simple steps:
   4. Purchase the extension from the Magento Marketplace;
   5. Login to your Magento 2.x Hosting site using SSH connection (for details contact your hosting provider);
   6. Run the following commands from the Magento root directory (more info in the official documentation):
-      - `composer require esparks/module-paylike` (this will also install paylike/php-api ^1.0.8` package specified in composer.json file in this module)
-      - `php bin/magento module:enable Esparks_Paylike --clear-static-content`
+      - `composer require lunar/module-paylike` (this will also install paylike/php-api ^1.0.8` package specified in composer.json file in this module)
+      - `esparks/module-paylike --clear-static-content`
       - `php bin/magento setup:upgrade`
       - `php bin/magento setup:di:compile`
       - `php bin/magento cache:clean`
@@ -80,9 +80,9 @@ Under the Magento Paylike payment method settings, you can:
 
  ## Upgrading module
   * To update or upgrade the module run following commands:
-       - `composer update esparks/module-paylike` (upgrade to latest version)<br>
+       - `composer update lunar/module-paylike` (upgrade to latest version)<br>
        or (for eg.)
-       - `composer require esparks/module-paylike ^1.0.1` (upgrade to version 1.0.1)
+       - `composer require lunar/module-paylike ^1.0.1` (upgrade to version 1.0.1)
 
   * After that, run the following commands:
       - `php bin/magento setup:upgrade --keep-generated`

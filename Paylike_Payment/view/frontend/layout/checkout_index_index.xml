@@ -7,9 +7,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="Esparks_Paylike/css/paylike.css" />
+        <css src="Lunar_Paylike/css/paylike.css" />
         <script src="https://sdk.paylike.io/10.js" src_type="url" />
-        <link src="Esparks_Paylike::js/logs.js"/>
+        <link src="Lunar_Paylike::js/logs.js"/>
     </head>
 
     <body>
@@ -30,7 +30,7 @@
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
                                                                 <item name="paylikepaymentmethod" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Esparks_Paylike/js/view/payment/paylikepaymentmethod</item>
+                                                                    <item name="component" xsi:type="string">Lunar_Paylike/js/view/payment/paylikepaymentmethod</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="paylikepaymentmethod" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>

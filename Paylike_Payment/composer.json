@@ -1,5 +1,5 @@
 {
-    "name": "esparks/module-paylike",
+    "name": "lunar/module-paylike",
     "description": "Paylike integration with payment gateway magento 2",
     "require": {
         "magento/module-sales": ">100.0.0",
@@ -15,7 +15,7 @@
     "autoload": {
         "files": [ "registration.php" ],
         "psr-4": {
-            "Esparks\\Paylike\\": ""
+            "Lunar\\Paylike\\": ""
         }
     }
 }

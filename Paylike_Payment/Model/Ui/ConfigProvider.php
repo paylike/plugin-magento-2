@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Esparks\Paylike\Model\Ui;
+namespace Lunar\Paylike\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
+use Lunar\Paylike\Gateway\Http\Client\TransactionAuthorize;
 
 /**
  * Class ConfigProvider
@@ -30,8 +30,8 @@ class ConfigProvider implements ConfigProviderInterface {
 		\Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
 		\Magento\Store\Model\StoreManagerInterface $storeManager,
 		\Magento\Framework\Locale\Resolver $locale,
-		\Esparks\Paylike\Model\Adminhtml\Source\AcceptedCards $cards,
-		\Esparks\Paylike\Helper\Data $helper
+		\Lunar\Paylike\Model\Adminhtml\Source\AcceptedCards $cards,
+		\Lunar\Paylike\Helper\Data $helper
 	) {
 		$this->scopeConfig             = $scopeConfig;
 		$this->_cart                   = $cart;
@@ -90,7 +90,7 @@ class ConfigProvider implements ConfigProviderInterface {
 		$finalcards = array();
 		$key        = 0;
 		foreach ( $selectedcards as $value ) {
-			$finalcards[ $key ] = $this->_assetRepo->getUrl( 'Esparks_Paylike::images/paymenticons/' . $value . '.svg' );
+			$finalcards[ $key ] = $this->_assetRepo->getUrl( 'Lunar_Paylike::images/paymenticons/' . $value . '.svg' );
 			$key                = $key + 1;
 		}
 

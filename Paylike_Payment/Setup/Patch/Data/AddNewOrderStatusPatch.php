@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Esparks\Paylike\Setup\Patch\Data;
+namespace Lunar\Paylike\Setup\Patch\Data;
 
 use Exception;
 use Magento\Sales\Model\Order;

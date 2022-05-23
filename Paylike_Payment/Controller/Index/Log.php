@@ -1,5 +1,5 @@
 <?php
-namespace Esparks\Paylike\Controller\Index;
+namespace Lunar\Paylike\Controller\Index;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;

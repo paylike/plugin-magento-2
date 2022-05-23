@@ -1,5 +1,5 @@
 <?php
-namespace Esparks\Paylike\lib\Paylike;
+namespace Lunar\Paylike\lib\Paylike;
 include_once( 'Adapter.php' );
 include_once( 'Transaction.php' );
 include_once( 'Card.php' );
