@@ -8,12 +8,12 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="payment_method_assign_data_paylikepaymentmethod">
-        <observer name="paylike_data_assign" instance="Esparks\Paylike\Observer\DataAssignObserver" />
+        <observer name="paylike_data_assign" instance="Lunar\Paylike\Observer\DataAssignObserver" />
     </event>
     <event name="checkout_submit_all_after">
-        <observer name="paylike_checkout_submit_all_after" instance="Esparks\Paylike\Observer\CheckoutAllSubmitAfterObserver"/>
+        <observer name="paylike_checkout_submit_all_after" instance="Lunar\Paylike\Observer\CheckoutAllSubmitAfterObserver"/>
     </event>
     <event name="sales_order_payment_void">
-        <observer name="paylike_sales_order_payment_void" instance="Esparks\Paylike\Observer\SalesOrderPaymentVoidObserver"/>
+        <observer name="paylike_sales_order_payment_void" instance="Lunar\Paylike\Observer\SalesOrderPaymentVoidObserver"/>
     </event>
 </config>

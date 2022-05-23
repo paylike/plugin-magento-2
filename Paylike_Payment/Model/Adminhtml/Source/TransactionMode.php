@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Model\Adminhtml\Source;
+namespace Lunar\Paylike\Model\Adminhtml\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 

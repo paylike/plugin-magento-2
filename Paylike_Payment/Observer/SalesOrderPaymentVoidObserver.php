@@ -1,6 +1,6 @@
 <?php
 
-namespace Esparks\Paylike\Observer;
+namespace Lunar\Paylike\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;

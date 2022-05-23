@@ -1,5 +1,5 @@
 {
-  "name": "paylike/plugin-magento",
+  "name": "lunarway/module-paylike",
   "description": "Paylike magento2 gateway development",
   "license": "MIT",
   "authors": [

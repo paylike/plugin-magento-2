@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Model\Adapter;
+namespace Lunar\Paylike\Model\Adapter;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
@@ -11,8 +11,8 @@ use Magento\Sales\Model\OrderRepository;
 
 use Magento\Store\Model\ScopeInterface;
 
-use Esparks\Paylike\lib\Paylike\Client;
-use Esparks\Paylike\lib\Paylike\Transaction;
+use Lunar\Paylike\lib\Paylike\Client;
+use Lunar\Paylike\lib\Paylike\Transaction;
 
 /**
  * Class PaylikeAdapter
@@ -22,7 +22,7 @@ use Esparks\Paylike\lib\Paylike\Transaction;
 class PaylikeAdapter
 {
 	const PLUGIN_CODE = 'paylikepaymentmethod';
-    
+
     private $scopeConfig;
     private $request;
     private $orderRepository;

@@ -1,4 +1,4 @@
-<?php namespace Esparks\Paylike\Helper;
+<?php namespace Lunar\Paylike\Helper;
 
 use Psr\Log\LoggerInterface as Logger;
 use Paylike\Exception\ApiException;
