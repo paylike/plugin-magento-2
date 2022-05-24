@@ -3,11 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Gateway\Validator;
+namespace Lunar\Paylike\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
-use Esparks\Paylike\Gateway\Http\Client\TransactionAuthorize;
+use Lunar\Paylike\Gateway\Http\Client\TransactionAuthorize;
 
 class ResponseCodeValidator extends AbstractValidator
 {

@@ -1,12 +1,12 @@
 <?php
-namespace Esparks\Paylike\Model\Adminhtml\Source;
+namespace Lunar\Paylike\Model\Adminhtml\Source;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class LogsActions extends Field {
-  protected $_template = 'Esparks_Paylike::system/config/LogsActions.phtml';
+  protected $_template = 'Lunar_Paylike::system/config/LogsActions.phtml';
 
   public function __construct(Context $context, array $data = []) {
     parent::__construct($context, $data);

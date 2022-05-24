@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Model\Adminhtml\Source;
+namespace Lunar\Paylike\Model\Adminhtml\Source;
 
-use \Esparks\Paylike\Helper\Data as Helper;
+use \Lunar\Paylike\Helper\Data as Helper;
 
 /**
  * Class TestAppKey
@@ -24,7 +24,7 @@ class TestAppKey extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param \Esparks\Paylike\Helper\Data
+     * @param \Lunar\Paylike\Helper\Data
      * @param array $data
      */
     public function __construct(

@@ -17,7 +17,7 @@ define(
         rendererList.push(
             {
                 type: 'paylikepaymentmethod',
-                component: 'Esparks_Paylike/js/view/payment/method-renderer/paylikepaymentmethod-method'
+                component: 'Lunar_Paylike/js/view/payment/method-renderer/paylikepaymentmethod-method'
             }
         );
         /** Add view logic here if needed */
