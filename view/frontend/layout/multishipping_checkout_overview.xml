@@ -7,14 +7,14 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="Esparks_Paylike/css/paylike.css" />
+        <css src="Lunar_Paylike/css/paylike.css" />
         <script src="https://sdk.paylike.io/10.js" src_type="url" />
-        <link src="Esparks_Paylike::js/logs.js"/>
+        <link src="Lunar_Paylike::js/logs.js"/>
     </head>
 
     <body>
       <referenceContainer name="content">
-          <block class="Magento\Multishipping\Block\Checkout\Billing" template="Esparks_Paylike::paylikemultishipping.phtml" cacheable="false">
+          <block class="Magento\Multishipping\Block\Checkout\Billing" template="Lunar_Paylike::paylikemultishipping.phtml" cacheable="false">
               <arguments>
                   <argument name="checkout_data" xsi:type="object">Magento\Multishipping\Block\DataProviders\Billing</argument>
               </arguments>

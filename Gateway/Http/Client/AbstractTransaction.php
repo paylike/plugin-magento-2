@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Esparks\Paylike\Gateway\Http\Client;
+namespace Lunar\Paylike\Gateway\Http\Client;
 
-use Esparks\Paylike\Model\Adapter\PaylikeAdapter;
+use Lunar\Paylike\Model\Adapter\PaylikeAdapter;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use Esparks\Paylike\Helper\Data;
+use Lunar\Paylike\Helper\Data;
 
 /**
  * Class AbstractTransaction

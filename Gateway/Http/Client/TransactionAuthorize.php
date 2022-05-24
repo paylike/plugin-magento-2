@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Gateway\Http\Client;
+namespace Lunar\Paylike\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -64,7 +64,7 @@ class TransactionAuthorize implements ClientInterface
     protected function generateResponseForCode(TransferInterface $transfer)
     {
         $data = $transfer->getBody();
-        
+
         if(isset($data['TXN_ID'])){
 
             $resultCode = self::SUCCESS;
@@ -74,9 +74,9 @@ class TransactionAuthorize implements ClientInterface
                 'TXN_ID' => $data['TXN_ID'],
                 'TXN_TYPE' => $data['TXN_TYPE']
             ],
-            
+
             $this->getFieldsBasedOnResponseType($resultCode)
-            
+
             );
         }
     }

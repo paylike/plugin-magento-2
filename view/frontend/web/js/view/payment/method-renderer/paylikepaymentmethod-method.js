@@ -27,7 +27,7 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Esparks_Paylike/payment/paylikepaymentmethod',
+                template: 'Lunar_Paylike/payment/paylikepaymentmethod',
                 payliketransactionid: ''
             },
 
@@ -76,7 +76,7 @@ define(
                 paylikeConfig.amount.value = Math.round(totalAmount * multiplier);
 
                 /** Change test key value from string 'test' with a boolean value. */
-                paylikeConfig.test = ('test' == paylikeConfig.test) ? (true) : (false);
+                paylikeConfig.test = ('test' === paylikeConfig.test) ? (true) : (false);
 
                 window.paylikeminoramount = paylikeConfig.amount.value;
 
@@ -99,10 +99,14 @@ define(
                         }
                         /**
                          * (Need improvement/rethink the logic)
-                         * If user closes the popup, we need to refresh the page.
+                         * In "test" mode if user closes the popup, we need to refresh the page.
                          * If not reload, the popup will show up in live mode.
                          */
-                        return location.reload();
+                        if ('test' === window.checkoutConfig.config.test) {
+                            return location.reload();
+                        }
+
+                        return console.warn(err);
                     }
 
                     if (res.transaction.id !== undefined && res.transaction.id !== "") {

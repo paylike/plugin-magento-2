@@ -3,29 +3,45 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Model\Adapter;
+namespace Lunar\Paylike\Model\Adapter;
 
-use Magento\Payment\Gateway\ConfigInterface;
-use Esparks\Paylike\lib\Paylike\Client;
-use Esparks\Paylike\lib\Paylike\Transaction;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Sales\Model\OrderRepository;
+
+use Magento\Store\Model\ScopeInterface;
+
+use Lunar\Paylike\lib\Paylike\Client;
+use Lunar\Paylike\lib\Paylike\Transaction;
 
 /**
  * Class PaylikeAdapter
  * @codeCoverageIgnore
+ * Adapter used for capture/refund/void an order from admin panel
  */
 class PaylikeAdapter
 {
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
+	const PLUGIN_CODE = 'paylikepaymentmethod';
+
+    private $scopeConfig;
+    private $request;
+    private $orderRepository;
 
     /**
-     * @param ConfigInterface $config
+     * @param ScopeConfigInterface $scopeConfig
+     * @param RequestInterface $request
+     * @param OrderRepository $orderRepository
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(
+            ScopeConfigInterface $scopeConfig,
+            RequestInterface $request,
+            OrderRepository $orderRepository
+        )
     {
-        $this->config = $config;
+        $this->scopeConfig = $scopeConfig;
+        $this->request = $request;
+        $this->orderRepository = $orderRepository;
+
         $this->setPrivateKey();
     }
 
@@ -34,16 +50,19 @@ class PaylikeAdapter
      */
     public function setPrivateKey()
     {
-        $transactionmode = $this->config->getValue('transaction_mode');
-        $privatekey = '';
-        if($transactionmode == "test"){
-            $privatekey = $this->config->getValue('test_app_key');
+        $transactionMode = $this->getStoreConfigValue('transaction_mode');
+
+        $privateKey = '';
+
+        if($transactionMode == "test"){
+            $privateKey = $this->getStoreConfigValue('test_app_key');
         }
 
-        else if($transactionmode == "live"){
-            $privatekey = $this->config->getValue('live_app_key');
+        else if($transactionMode == "live"){
+            $privateKey = $this->getStoreConfigValue('live_app_key');
         }
-        Client::setKey($privatekey);
+
+        Client::setKey($privateKey);
     }
 
     /**
@@ -76,4 +95,31 @@ class PaylikeAdapter
         return Transaction::refund($transactionId, $data);
     }
 
+    /**
+     * Get store config value
+     *
+     * @param string $configId
+     */
+    private function getStoreConfigValue($configId)
+    {
+        /**
+         * Get order Id from request.
+         * Get order by id
+         * Get store id from order
+         */
+        $orderId = $this->request->getParam('order_id');
+        $order = $this->orderRepository->get($orderId);
+        $orderStoreId = $order->getStore()->getId();
+
+        /**
+         * "path" is composed based on etc/adminhtml/system.xml as "section_id/group_id/field_id"
+         */
+        $configPath = 'payment/' . self::PLUGIN_CODE . '/' . $configId;
+
+        return $this->scopeConfig->getValue(
+            /*path*/ $configPath,
+            /*scopeType*/ ScopeInterface::SCOPE_STORE,
+            /*scopeCode*/ $orderStoreId
+        );
+    }
 }

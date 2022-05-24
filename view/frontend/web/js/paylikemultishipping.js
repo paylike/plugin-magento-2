@@ -32,7 +32,7 @@ define(
 
 
             /** Change test key value from string 'test' with a boolean value. */
-            paylikeConfig.test = ('test' == paylikeConfig.test) ? (true) : (false);
+            paylikeConfig.test = ('test' === paylikeConfig.test) ? (true) : (false);
 
             quote.guestEmail = window.checkoutConfig.customerData.email;
             /** Need to be logged in to perform checkout with multishipping. */
@@ -55,7 +55,11 @@ define(
             }
 
             paylikeConfig.custom.customer.phoneNo = billingAddress.telephone;
-            paylikeConfig.custom.customer.address = billingAddress.inline;
+            paylikeConfig.custom.customer.address = billingAddress.street[0] + ", " +
+                                                    billingAddress.city + ", " +
+                                                    billingAddress.region.region + " " +
+                                                    billingAddress.postcode + ", " +
+                                                    billingAddress.country_id;
 
             PaylikeLogger.setContext(paylikeConfig, $, url);
 

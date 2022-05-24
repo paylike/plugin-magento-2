@@ -14,7 +14,7 @@
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Paylike</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <frontend_class>paylike-version version-1.4.1</frontend_class>
+                    <frontend_class>paylike-version version-1.4.4</frontend_class>
                 </field>
 
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -24,7 +24,7 @@
                 <field id="acceptedcards" translate="label" type="multiselect" sortOrder="5" showInDefault="1"
                        showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Payment method credit card logos</label>
-                    <source_model>Esparks\Paylike\Model\Adminhtml\Source\AcceptedCards</source_model>
+                    <source_model>Lunar\Paylike\Model\Adminhtml\Source\AcceptedCards</source_model>
                 </field>
 
                 <field id="description" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -38,14 +38,14 @@
 
                 <field id="transaction_mode" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Transaction mode</label>
-                    <source_model>Esparks\Paylike\Model\Adminhtml\Source\TransactionMode</source_model>
+                    <source_model>Lunar\Paylike\Model\Adminhtml\Source\TransactionMode</source_model>
                     <comment>In test mode, you can create a successful transaction with the card number 4100 0000 0000 0000 with any CVC and a valid expiration date.</comment>
                 </field>
 
                 <field id="test_app_key" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Test mode App Key</label>
                     <comment>Get it from your Paylike dashboard</comment>
-                    <backend_model>Esparks\Paylike\Model\Adminhtml\Source\TestAppKey</backend_model>
+                    <backend_model>Lunar\Paylike\Model\Adminhtml\Source\TestAppKey</backend_model>
                     <depends>
                         <field id="transaction_mode">test</field>
                     </depends>
@@ -54,7 +54,7 @@
                 <field id="test_api_key" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Test mode Public Key</label>
                     <comment>Get it from your Paylike dashboard</comment>
-                    <backend_model>Esparks\Paylike\Model\Adminhtml\Source\TestApiKey</backend_model>
+                    <backend_model>Lunar\Paylike\Model\Adminhtml\Source\TestApiKey</backend_model>
                     <depends>
                         <field id="transaction_mode">test</field>
                     </depends>
@@ -63,7 +63,7 @@
                 <field id="live_app_key" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Live mode App Key</label>
                     <comment>Get it from your Paylike dashboard</comment>
-                    <backend_model>Esparks\Paylike\Model\Adminhtml\Source\LiveAppKey</backend_model>
+                    <backend_model>Lunar\Paylike\Model\Adminhtml\Source\LiveAppKey</backend_model>
                     <depends>
                         <field id="transaction_mode">live</field>
                     </depends>
@@ -72,7 +72,7 @@
                 <field id="live_api_key" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Live mode Public Key</label>
                     <comment>Get it from your Paylike dashboard</comment>
-                    <backend_model>Esparks\Paylike\Model\Adminhtml\Source\LiveApiKey</backend_model>
+                    <backend_model>Lunar\Paylike\Model\Adminhtml\Source\LiveApiKey</backend_model>
                     <depends>
                         <field id="transaction_mode">live</field>
                     </depends>
@@ -80,7 +80,7 @@
 
                 <field id="capture_mode" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Capture mode</label>
-                    <source_model>Esparks\Paylike\Model\Adminhtml\Source\CaptureMode</source_model>
+                    <source_model>Lunar\Paylike\Model\Adminhtml\Source\CaptureMode</source_model>
                     <comment>If you deliver your product instantly (e.g. a digital product), choose Instant mode. If not, use Delayed. The capture in delayed mode is done when an invoice is created.</comment>
                 </field>
 
@@ -108,7 +108,7 @@
 
                 <field id="logs_actions" translate="label" type="button" sortOrder="162" showInDefault="1" showInWebsite="1" showInStore="1">
                   <label>Logs actions</label>
-                  <frontend_model>Esparks\Paylike\Model\Adminhtml\Source\LogsActions</frontend_model>
+                  <frontend_model>Lunar\Paylike\Model\Adminhtml\Source\LogsActions</frontend_model>
                 </field>
 
             </group>

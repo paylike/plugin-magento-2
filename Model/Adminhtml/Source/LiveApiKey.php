@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Esparks\Paylike\Model\Adminhtml\Source;
+namespace Lunar\Paylike\Model\Adminhtml\Source;
 
-use \Esparks\Paylike\Helper\Data as Helper;
+use \Lunar\Paylike\Helper\Data as Helper;
 
 /**
  * Class LiveApiKey
