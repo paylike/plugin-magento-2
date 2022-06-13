@@ -54,7 +54,7 @@ Once you have installed Magento, follow these simple steps:
   4. Purchase the extension from the Magento Marketplace;
   5. Login to your Magento 2.x Hosting site using SSH connection (for details contact your hosting provider);
   6. Run the following commands from the Magento root directory (more info in the official documentation):
-      - `composer require lunarway/module-paylike` (this will also install paylike/php-api ^1.0.8` package specified in composer.json file in this module)
+      - `composer require lunar/module-paylike` (this will also install paylike/php-api ^1.0.8` package specified in composer.json file in this module)
       - `esparks/module-paylike --clear-static-content`
       - `php bin/magento setup:upgrade`
       - `php bin/magento setup:di:compile`
@@ -80,9 +80,9 @@ Under the Magento Paylike payment method settings, you can:
 
  ## Upgrading module
   * To update or upgrade the module run following commands:
-       - `composer update lunarway/module-paylike` (upgrade to latest version)<br>
+       - `composer update lunar/module-paylike` (upgrade to latest version)<br>
        or (for eg.)
-       - `composer require lunarway/module-paylike ^1.0.1` (upgrade to version 1.0.1)
+       - `composer require lunar/module-paylike ^1.0.1` (upgrade to version 1.0.1)
 
   * After that, run the following commands:
       - `php bin/magento setup:upgrade --keep-generated`
