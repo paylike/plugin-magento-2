@@ -1,5 +1,5 @@
 {
-    "name": "lunarway/module-paylike",
+    "name": "lunar/module-paylike",
     "description": "Paylike integration with payment gateway magento 2",
     "require": {
         "magento/module-sales": ">100.0.0",
