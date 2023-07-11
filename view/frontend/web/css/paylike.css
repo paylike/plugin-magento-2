@@ -1,4 +1,9 @@
 .paylike-card-logos img {
     vertical-align: middle;
     margin-right: 5px;
+    display: inline-block !important;
+}
+
+.paylike-pm-description {
+    margin-left: 0 !important;
 }

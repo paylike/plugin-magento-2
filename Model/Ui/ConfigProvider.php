@@ -14,7 +14,7 @@ use Lunar\Paylike\Gateway\Http\Client\TransactionAuthorize;
  */
 class ConfigProvider implements ConfigProviderInterface {
 	const PLUGIN_CODE = 'paylikepaymentmethod';
-	const MAGENTO_PAYLIKE_VERSION = '1.5.1';
+	const MAGENTO_PAYLIKE_VERSION = '1.6.0';
 	protected $scopeConfig;
 	protected $_cart;
 	protected $_assetRepo;
