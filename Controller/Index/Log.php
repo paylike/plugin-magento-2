@@ -91,7 +91,7 @@ class Log extends Action {
     }
 
 
-    $date = date(LOGS_DATE_FORMAT, ($post["date"] / 1000));
+    $date = date(LOGS_DATE_FORMAT, (int)($post["date"] / 1000));
     $id = $post["context"]["custom"]["quoteId"];
     $filename = LOGS_DIR_NAME . DIRECTORY_SEPARATOR . $date . "___" . $id . ".log";
 

@@ -1,8 +1,3 @@
-.idea
+../.idea
 .DS_Store
-Esparks/.DS_Store
-logs
-.env
-.env.production
-vendor
-cypress.env.json
+Lunar/.DS_Store
